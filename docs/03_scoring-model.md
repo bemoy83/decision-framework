@@ -2,7 +2,7 @@
 
 ## Scoring Model
 
-**Version:** 1.1
+**Version:** 1.4
 **Status:** Locked
 **Last Updated:** 2026-07-06
 
@@ -156,6 +156,8 @@ Reviews explain what the Evidence means.
 
 Reviews never replace Evidence.
 
+Every Review's Score is recorded on a fixed 1–5 integer scale (ADR-005). 1 represents a significant, documented shortcoming; 5 represents a significant, documented strength. The scale is deliberately coarse — Reviews interpret Evidence, they do not simulate false precision.
+
 ---
 
 # Stage 5 – Criterion Score
@@ -179,6 +181,13 @@ Each Criterion Score references:
 
 Criterion Scores remain independently explainable.
 
+Each Criterion Score is calculated, never manually entered, using the following documented rule (ADR-005):
+
+* `RawScore = ROUND(Review.Score / 5 * 100, 2)`
+* `WeightedScore = ROUND(RawScore * Criterion.Weight / 100, 2)`
+
+This rounding rule is binding: identical Review Scores and Criterion Weights shall always produce identical RawScore and WeightedScore values.
+
 ---
 
 # Stage 6 – Overall Score
@@ -190,6 +199,12 @@ The Overall Score introduces no new information.
 It aggregates existing Criterion Scores according to the active Framework Version.
 
 The Overall Score is therefore fully reproducible.
+
+The Overall Score is calculated as the sum of WeightedScore across a Configuration's Criterion Scores for the active Framework Version.
+
+Every Overall Score carries a Coverage Percentage: the proportion of the framework's total WEIGHTED, Active Criterion weight that has actually been scored for that Configuration.
+
+An Overall Score shall never be presented, compared or used to support a Recommendation without its Coverage Percentage. A Coverage Percentage below 100 means the Overall Score is a partial, not a complete, evaluation — consistent with the principle that Unknown is preferable to assumed (see `docs/01_project-philosophy.md`).
 
 ---
 

@@ -224,7 +224,6 @@ Examples
 * Cargo capacity
 * Rear-seat usability
 * Everyday practicality
-* Garage friendliness
 
 Focus
 
@@ -261,6 +260,25 @@ Examples
 Focus
 
 Charging performance should support predictable long-distance travel under Norwegian conditions.
+
+---
+
+## 8. Garage Friendliness Beyond Minimum
+
+Importance
+
+**Medium**
+
+Garage friendliness is evaluated in two stages. Whether a Configuration fits the owner's garage at all is a Hard Requirement (maximum vehicle length, see Hard Requirements). This category evaluates the practical margin a Configuration provides beyond that minimum.
+
+Examples
+
+* Length margin below the maximum requirement
+* Turning and manoeuvring space within the garage
+
+Focus
+
+A Configuration that clears the hard length requirement with room to spare reduces day-to-day friction over the ownership period, independent of general cargo or rear-seat practicality.
 
 ---
 

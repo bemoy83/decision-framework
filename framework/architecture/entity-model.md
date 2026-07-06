@@ -2,7 +2,7 @@
 
 ## Entity Model
 
-**Version:** 1.2
+**Version:** 1.4
 **Status:** Locked
 **Last Updated:** 2026-07-06
 
@@ -65,6 +65,7 @@ Evidence
 Source
 Review
 Score
+OverallScore
 FrameworkVersion
 Decision
 ```
@@ -410,6 +411,40 @@ Scores are never manually entered.
 
 ---
 
+# OverallScore
+
+## Purpose
+
+Represents the aggregated framework evaluation for one Configuration under one Framework Version.
+
+Identity
+
+OverallScoreID
+
+Owns
+
+* overall score
+* coverage percentage
+
+References
+
+* Configuration
+* FrameworkVersion
+
+OverallScore does **not** reference a single Review.
+
+It aggregates existing Criterion Scores rather than evaluating one Review directly.
+
+OverallScore always carries its coverage percentage alongside the aggregated value.
+
+An OverallScore with less than full coverage represents a partial, not a complete, evaluation.
+
+OverallScores are generated.
+
+OverallScores are never manually entered.
+
+---
+
 # FrameworkVersion
 
 ## Purpose
@@ -483,6 +518,7 @@ Each entity owns only the information it creates.
 | Review              | Interpretation        |
 | Criterion           | Evaluation definition |
 | Score               | Calculated evaluation |
+| OverallScore        | Aggregated evaluation |
 | FrameworkVersion    | Framework identity    |
 | Decision            | Architectural history |
 

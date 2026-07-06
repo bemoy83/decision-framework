@@ -2,7 +2,7 @@
 
 ## Relationships Model
 
-**Version:** 1.2
+**Version:** 1.4
 **Status:** Locked
 **Last Updated:** 2026-07-06
 
@@ -53,7 +53,8 @@ Vehicle
 │      ├── Technical
 │      ├── Equipment
 │      ├── Review
-│      └── Score
+│      ├── Score
+│      └── OverallScore
 │
 ├── Technical
 ├── Review
@@ -78,6 +79,11 @@ Score
     │
     ▼
 Review
+
+OverallScore
+    │
+    ▼
+Score (aggregated)
 
 FrameworkVersion
     │
@@ -309,6 +315,32 @@ This guarantees reproducibility.
 
 ---
 
+## Configuration → OverallScore
+
+Relationship
+
+**One-to-Many (1:N)**
+
+A Configuration may have one OverallScore per Framework Version.
+
+OverallScore aggregates that Configuration's Criterion Scores; it does not introduce new information.
+
+---
+
+## Score → OverallScore
+
+Relationship
+
+**Aggregation, not reference**
+
+OverallScore is computed from the set of Criterion Scores belonging to a Configuration under a Framework Version.
+
+OverallScore does not reference a single Score or a single Review.
+
+Every OverallScore carries a coverage percentage describing what proportion of the framework's weighted criteria contributed to it.
+
+---
+
 ## Decision → FrameworkVersion
 
 Relationship
@@ -331,6 +363,7 @@ Every architecture decision references the Framework Version under which it beca
 | Evidence            | Verified observations                                                                          |
 | Review              | Interpretation                                                                                 |
 | Score               | Evaluation                                                                                     |
+| OverallScore        | Aggregated evaluation, coverage percentage                                                      |
 | FrameworkVersion    | Framework identity                                                                             |
 
 ---
@@ -363,6 +396,13 @@ Score shall reference:
 * one Configuration;
 * one Review;
 * one FrameworkVersion.
+
+OverallScore shall reference:
+
+* one Configuration;
+* one FrameworkVersion.
+
+OverallScore shall not reference a single Review or a single Score.
 
 Broken references are considered implementation errors.
 

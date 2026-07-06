@@ -2,7 +2,7 @@
 
 ## Data Flow
 
-**Version:** 1.1
+**Version:** 1.4
 **Status:** Locked
 **Last Updated:** 2026-07-06
 
@@ -283,6 +283,10 @@ Final framework evaluation.
 Overall Scores introduce no new knowledge.
 
 They aggregate existing Criterion Scores only.
+
+Implemented as a distinct OverallScore entity (`12_OverallScores` in the Reference Workbook), referencing Configuration and FrameworkVersion, never a single Review or Score (ADR-005).
+
+Every Overall Score carries a coverage percentage — the proportion of the framework's weighted criteria actually scored. An Overall Score with less than full coverage is a partial, not a complete, evaluation, and must always be presented alongside its coverage figure.
 
 ---
 

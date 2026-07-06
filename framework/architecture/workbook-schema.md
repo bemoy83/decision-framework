@@ -2,7 +2,7 @@
 
 ## Workbook Schema
 
-**Version:** 1.2
+**Version:** 1.4
 **Status:** Locked
 **Last Updated:** 2026-07-06
 
@@ -194,8 +194,9 @@ The workbook consists of the following worksheets.
 | 07_Reviews              | Operational | Qualitative interpretation of evidence           |
 | 08_Evidence             | Operational | Documented observations                          |
 | 09_Sources              | Reference   | Information source catalogue                     |
-| 10_Scoring              | Calculated  | Criterion and overall scores                     |
+| 10_Scoring              | Calculated  | Criterion scores                                 |
 | 11_DecisionLog          | Metadata    | Framework and workbook change history            |
+| 12_OverallScores        | Calculated  | Aggregated Overall Score and coverage per Configuration |
 
 ---
 
@@ -256,6 +257,7 @@ Contain generated output.
 Examples:
 
 * Scoring
+* Overall Scores
 
 Calculated worksheets shall never become the authoritative source for raw information.
 
@@ -833,7 +835,7 @@ ReviewID
 | Score            | Review assessment               |
 | Confidence       | Confidence level                |
 | Summary          | Human-readable interpretation   |
-| EvidenceID       | Supporting evidence             |
+| EvidenceID       | One or more supporting Evidence identifiers, comma-separated |
 | FrameworkVersion | Framework version used          |
 
 ---
@@ -857,6 +859,8 @@ The **Category** column represents a framework-defined domain classification.
 Review Categories are intentionally excluded from the framework enumeration contract.
 
 New Review Categories may be introduced without modifying `framework/architecture/enumerations.md`.
+
+Where a Review references more than one Evidence record, `EvidenceID` shall contain a comma-separated list of Evidence identifiers. Every identifier in that list shall resolve to an existing `EvidenceID` (see ADR-006).
 
 ---
 
@@ -923,6 +927,10 @@ Evidence should be independently verifiable.
 Only one of VehicleID or ConfigurationID should be populated for a single Evidence record.
 
 Evidence supports Reviews but is never modified by them.
+
+Evidence shall never reference a Review. The Reference Workbook previously exposed a `ReviewID` column on this worksheet; this diverged from the documented schema above and has been removed (ADR-006).
+
+The **Evidence Type** enumeration (`framework/architecture/enumerations.md`) is defined but intentionally not yet represented as a workbook column. This is a known, deferred gap, not an oversight.
 
 ---
 
@@ -1059,6 +1067,12 @@ Every Score shall be reproducible from:
 
 Scores should never be manually edited.
 
+`RawScore` and `WeightedScore` shall be implemented as formulas that look up `Review.Score` (07_Reviews) and `Criterion.Weight` (01_Criteria) by identifier, not as manually entered or pasted values (ADR-005).
+
+`RawScore = ROUND(Score / 5 * 100, 2)`. `WeightedScore = ROUND(RawScore * Weight / 100, 2)`. `Review.Score` uses a fixed 1–5 integer scale (see `docs/03_scoring-model.md`).
+
+Configuration-level Overall Scores are calculated in `12_OverallScores`, not in this worksheet.
+
 ---
 
 # 11_DecisionLog
@@ -1116,6 +1130,72 @@ DecisionLog documents implementation history.
 Architectural decisions should reference the corresponding ADR whenever applicable.
 
 DecisionLog improves traceability between documentation, implementation and project history.
+
+---
+
+# 12_OverallScores
+
+## Purpose
+
+Stores the aggregated Overall Score for one Configuration under one Framework Version.
+
+Overall Scores are generated.
+
+They are never entered manually.
+
+They introduce no new information beyond what is already recorded in `10_Scoring`.
+
+---
+
+## Worksheet Type
+
+Calculated
+
+---
+
+## Primary Key
+
+OverallScoreID
+
+---
+
+## References
+
+* ConfigurationID
+* FrameworkVersion
+
+---
+
+## Referenced By
+
+None
+
+---
+
+## Columns
+
+| Column           | Description                                                            |
+| ---------------- | ------------------------------------------------------------------------ |
+| OverallScoreID   | Stable overall score identifier                                          |
+| ConfigurationID  | Evaluated configuration                                                  |
+| FrameworkVersion | Framework version used                                                   |
+| OverallScore     | Sum of WeightedScore across this Configuration's 10_Scoring rows         |
+| CoveragePercent  | Percentage of total WEIGHTED + Active Criterion weight actually scored   |
+| CriteriaScored   | Count of WEIGHTED + Active criteria with a Score for this Configuration  |
+| CriteriaTotal    | Count of all WEIGHTED + Active criteria in 01_Criteria                   |
+| Notes            | Optional notes, e.g. flagging incomplete coverage                        |
+
+---
+
+## Notes
+
+An OverallScore shall never be interpreted, displayed, or exported without its `CoveragePercent` alongside it.
+
+`CoveragePercent` below 100 marks the Overall Score as a partial, not a complete, evaluation. It is a real and reproducible number, never a substitute for the missing criteria.
+
+OverallScore does not reference a single Review or a single Score row. It aggregates all `10_Scoring` rows for the given `ConfigurationID` and `FrameworkVersion` (ADR-005).
+
+OverallScore should never be manually edited.
 
 ---
 
@@ -1280,6 +1360,8 @@ Every Review shall reference:
 * an existing Vehicle or Configuration;
 * at least one existing Evidence record.
 
+Where `EvidenceID` contains a comma-separated list, every individual identifier in that list shall resolve to an existing `EvidenceID` (ADR-006).
+
 Every Score shall reference:
 
 * an existing Configuration;
@@ -1353,10 +1435,11 @@ This rule preserves unambiguous ownership throughout the framework.
 
 The workbook intentionally separates editable information from calculated information.
 
-Only the following worksheet contains calculated framework evaluations.
+Only the following worksheets contain calculated framework evaluations.
 
 ```text id="xyyu0i"
 10_Scoring
+12_OverallScores
 ```
 
 Operational worksheets shall never contain calculated scores.
@@ -1383,10 +1466,11 @@ The following worksheets contain manually maintained information.
 
 ---
 
-## Calculated Worksheet
+## Calculated Worksheets
 
 ```text id="l7nknw"
 10_Scoring
+12_OverallScores
 ```
 
 Scores shall always be derived from documented framework rules.
@@ -1483,6 +1567,12 @@ ScoreID
 SCORE_000001
 ```
 
+OverallScoreID
+
+```text id="ovsc01"
+OVSC_000001
+```
+
 Identifiers should never encode mutable information.
 
 ---
@@ -1555,6 +1645,10 @@ These rules shall never be violated.
 - A Score shall reference exactly one Configuration.
 - A Score shall reference exactly one Criterion.
 - A Score shall reference exactly one Review.
+- An OverallScore shall reference exactly one Configuration.
+- An OverallScore shall reference exactly one FrameworkVersion.
+- An OverallScore shall never reference a single Review or a single Score.
+- An OverallScore shall always carry a CoveragePercent.
 - EquipmentDefinitions define features.
 - Equipment records define availability.
 - Reviews interpret Evidence.
