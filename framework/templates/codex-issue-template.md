@@ -20,6 +20,20 @@ You are **not** responsible for defining methodology or modifying framework arch
 
 ---
 
+# Definition of Done
+
+This issue is considered complete only if:
+
+- All acceptance criteria have been satisfied.
+- The implementation complies with the documented framework.
+- Validation has been completed.
+- No undocumented assumptions remain.
+- A Pull Request has been opened.
+- Architecture review has been requested.
+- The Pull Request has **not** been merged.
+
+---
+
 # Task
 
 **Issue Number**
