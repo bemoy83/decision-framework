@@ -2,23 +2,30 @@
 
 ## Project Philosophy
 
-**Version:** 1.0
+**Version:** 1.1
 **Status:** Locked
-**Last Updated:** 2026-07-04
+**Last Updated:** 2026-07-06
 
 ---
 
 # Mission
 
-The EV Decision Framework exists to support rational, transparent and explainable vehicle purchasing decisions.
+The EV Decision Framework exists to support rational, transparent and explainable purchasing decisions.
 
 The framework is designed to answer a single question:
 
-> **Which vehicle will provide the greatest long-term ownership satisfaction with the fewest meaningful compromises?**
+> **Which electric vehicle configuration will provide the greatest long-term ownership satisfaction with the fewest meaningful compromises?**
 
 The objective is **not** to identify the fastest, cheapest or most exciting vehicle.
 
-The objective is to minimize the probability of purchase regret over an ownership period of approximately **8–10 years**.
+The objective is to minimise the probability of purchase regret over an ownership period of approximately **8–10 years**.
+
+The framework distinguishes between:
+
+* **Vehicle** – the shared identity of a vehicle model.
+* **Configuration** – the purchasable product evaluated by the framework.
+
+Recommendations are always made for Configurations.
 
 ---
 
@@ -28,9 +35,9 @@ The objective is to minimize the probability of purchase regret over an ownershi
 
 Vehicle purchases are often influenced by launch events, marketing, YouTube reviews and emotional first impressions.
 
-This framework intentionally prioritizes the ownership experience after several years rather than the excitement of the first week.
+This framework intentionally prioritises the ownership experience after several years rather than the excitement of the first week.
 
-Whenever uncertainty exists, the following question should be asked:
+Whenever uncertainty exists, ask:
 
 > **Will this still matter on a cold Monday morning five years from now?**
 
@@ -40,7 +47,7 @@ If the answer is "probably not", the criterion should receive little or no weigh
 
 ## 2. Facts before opinions
 
-Objective data should always be preferred over subjective opinions.
+Objective information should always be preferred over subjective opinions.
 
 Examples of objective information include:
 
@@ -51,33 +58,39 @@ Examples of objective information include:
 * Independent measurements
 * Verified specifications
 
-Subjective evaluations are still valuable but must always be clearly identified as opinions.
+Subjective assessments remain valuable but shall always be clearly identified as interpretation rather than fact.
 
 ---
 
-## 3. Separate data from interpretation
+## 3. Separate facts from interpretation
 
-The framework deliberately separates:
+The framework deliberately separates different kinds of knowledge.
 
-* Raw data
+* Identity
+* Technical facts
+* Equipment availability
 * Evidence
-* Quality assessment
-* Personal weighting
-* Final recommendation
+* Review
+* Evaluation
+* Recommendation
 
-This allows new information to improve the framework without rewriting historical data.
+Each stage has a single responsibility.
+
+Separating these concerns allows new information to improve future evaluations without rewriting historical observations.
 
 ---
 
-## 4. Every conclusion must be explainable
+## 4. Every recommendation must be explainable
 
-The framework shall never produce a score that cannot be explained.
+The framework shall never produce a recommendation that cannot be explained.
 
 Every recommendation should answer:
 
-* Why did this vehicle score well?
-* Why did another vehicle score lower?
-* Which evidence supports the conclusion?
+* Why did this Configuration score well?
+* Why did another Configuration score lower?
+* Which Reviews influenced the result?
+* Which Evidence supports those Reviews?
+* Which Sources support the Evidence?
 
 Transparency is considered more important than complexity.
 
@@ -85,13 +98,15 @@ Transparency is considered more important than complexity.
 
 ## 5. Unknown is better than assumed
 
-Missing information should never be replaced with guesses.
+Missing information shall never be replaced with assumptions.
 
-If evidence is unavailable, the correct value is:
+If sufficient evidence is unavailable, the correct value is:
 
 > **Unknown**
 
-The framework values intellectual honesty over completeness.
+The framework values intellectual honesty over artificial completeness.
+
+Unknown information may reduce confidence, but it should never be hidden.
 
 ---
 
@@ -101,17 +116,19 @@ Not all information carries the same level of certainty.
 
 Every qualitative assessment should include a confidence level.
 
-Confidence reflects the quality and quantity of supporting evidence rather than the strength of the conclusion.
+Confidence reflects the quality and quantity of supporting Evidence rather than the strength of a conclusion.
+
+Higher confidence should result from stronger supporting Evidence, not stronger personal conviction.
 
 ---
 
 ## 7. The framework should challenge bias
 
-The purpose of the framework is not to confirm existing preferences.
+The framework does not exist to confirm existing preferences.
 
-Instead, it should challenge assumptions whenever objective evidence points elsewhere.
+Its purpose is to challenge assumptions whenever objective Evidence suggests an alternative conclusion.
 
-If a preferred vehicle scores significantly lower than a competing model, the framework should encourage further investigation before a decision is made.
+If a preferred Configuration scores significantly lower than an alternative, the framework should encourage further investigation before a purchase decision is made.
 
 ---
 
@@ -119,24 +136,34 @@ If a preferred vehicle scores significantly lower than a competing model, the fr
 
 The framework recognises that purchasing a vehicle is not a purely mathematical exercise.
 
-If two vehicles achieve comparable scores, subjective preference may legitimately determine the final decision.
+If two Configurations receive comparable overall evaluations, subjective preference may legitimately determine the final decision.
 
-However, personal preference should only influence the decision after objective differences have become sufficiently small.
+Examples include:
+
+* preferred styling;
+* emotional appeal;
+* colour;
+* brand affinity.
+
+Personal preference should influence the decision only after objective differences have become sufficiently small.
 
 ---
 
 # Design Goals
 
-The framework should be:
+The framework should always remain:
 
 * Transparent
 * Repeatable
 * Evidence-driven
-* Modular
 * Explainable
+* Traceable
+* Modular
 * Maintainable
-* Expandable
+* Extensible
 * Suitable for future automation
+
+Architectural clarity should always take precedence over implementation convenience.
 
 ---
 
@@ -146,7 +173,7 @@ The framework prefers evidence in the following order.
 
 ## Tier A
 
-Objective and measurable sources.
+Objective and independently verifiable sources.
 
 Examples:
 
@@ -160,12 +187,11 @@ Examples:
 
 ## Tier B
 
-Professional reviews.
+Professional automotive reviews.
 
 Examples:
 
 * Motor.no
-* Motor
 * What Car?
 * Autogefühl
 * Other established automotive publications
@@ -182,33 +208,41 @@ Examples:
 * Community forums
 * Reddit (used critically)
 
-No single source should determine an evaluation on its own.
+No individual source shall determine an evaluation on its own.
+
+Confidence should increase when multiple independent sources support the same conclusion.
 
 ---
 
 # Decision Philosophy
 
-The framework evaluates vehicles according to their ability to deliver long-term ownership quality rather than marketing appeal.
+The framework evaluates Configurations according to their ability to deliver long-term ownership quality rather than marketing appeal.
 
-The preferred vehicle is therefore not necessarily:
+Vehicle identity provides shared context.
 
-* the fastest,
-* the most luxurious,
-* or the least expensive,
+Configuration represents the purchasable product.
 
-but rather the one that offers the best overall ownership experience within the defined constraints.
+Recommendations therefore refer to Configurations rather than Vehicles.
+
+The preferred Configuration is not necessarily:
+
+* the fastest;
+* the most luxurious;
+* the least expensive;
+
+but the one that delivers the strongest overall ownership experience within the user's defined constraints.
 
 ---
 
 # Framework Evolution
 
-The framework itself is version controlled.
+The framework is version controlled.
 
 Criteria, weighting and methodology may evolve over time.
 
-Vehicle evaluations are always tied to the framework version used when the analysis was performed.
+Configuration evaluations shall always remain bound to the Framework Version under which they were performed.
 
-This ensures historical recommendations remain reproducible.
+This guarantees that historical evaluations remain reproducible and comparable within their original methodological context.
 
 ---
 
@@ -216,8 +250,14 @@ This ensures historical recommendations remain reproducible.
 
 > **The framework exists to improve decisions, not replace judgement.**
 
-Data should inform the decision.
+Facts inform the framework.
 
-Evidence should support the decision.
+Evidence supports conclusions.
 
-The owner remains responsible for the final choice.
+Reviews interpret evidence.
+
+Scores evaluate interpretations.
+
+The framework provides decision support.
+
+The purchaser remains responsible for the final choice.

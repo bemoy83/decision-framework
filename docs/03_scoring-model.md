@@ -2,246 +2,283 @@
 
 ## Scoring Model
 
-**Version:** 1.0
+**Version:** 1.1
 **Status:** Locked
-**Last Updated:** 2026-07-04
+**Last Updated:** 2026-07-06
 
 ---
 
 # Purpose
 
-This document defines how vehicle evaluations are calculated.
+This document defines how the EV Decision Framework evaluates vehicle **Configurations**.
 
-The scoring model is designed to produce transparent, explainable and repeatable recommendations.
+The scoring model is designed to produce recommendations that are:
 
-Every score should be reproducible using the same input data and framework version.
+* transparent;
+* explainable;
+* repeatable;
+* reproducible.
+
+Every Overall Score shall be reproducible using the same Framework Version and the same underlying information.
+
+The scoring model evaluates Configurations.
+
+Vehicle models provide shared context but are never ranked directly.
+
+---
+
+# Design Principles
+
+The scoring model follows six principles.
+
+1. Eligibility before evaluation.
+2. Facts before interpretation.
+3. Evidence before scoring.
+4. Reviews before judgement.
+5. Weighting expresses priorities.
+6. Every score shall remain explainable.
 
 ---
 
 # Evaluation Pipeline
 
-Vehicle evaluation follows the same sequence for every candidate.
+Every Configuration follows the same evaluation pipeline.
 
-```
+```text id="wksr4b"
 Vehicle
-
-↓
-
+        │
+        ▼
+Configuration
+        │
+        ▼
 Hard Requirements
-
-↓
-
-Objective Data
-
-↓
-
-Evidence Collection
-
-↓
-
-Quality Assessment
-
-↓
-
-Weighted Scoring
-
-↓
-
-Final Recommendation
+        │
+        ▼
+Technical Facts
+        │
+        ▼
+Evidence
+        │
+        ▼
+Review
+        │
+        ▼
+Criterion Score
+        │
+        ▼
+Overall Score
+        │
+        ▼
+Recommendation
 ```
 
-Each stage is independent from the next.
+Each stage adds understanding while preserving traceability to the previous stage.
 
 ---
 
-# Stage 1 – Hard Requirements
+# Stage 1 – Configuration Eligibility
 
-Hard requirements act as filters.
-
-Vehicles failing one or more mandatory requirements are excluded before scoring begins.
+Hard Requirements determine whether a Configuration enters the evaluation pipeline.
 
 Examples include:
 
+* Battery electric vehicle
 * Maximum vehicle length
-* Vehicle type
-* Winter range requirement
-* Market availability
+* Norwegian market availability
+* Winter motorway range requirement
 
-A vehicle that fails a hard requirement does not receive a final score.
+Configurations failing one or more Hard Requirements shall not receive an Overall Score.
 
 ---
 
-# Stage 2 – Objective Data
+# Stage 2 – Technical Facts
 
-Objective data consists of measurable facts.
+Technical Facts consist of measurable information.
 
-Examples:
+Examples include:
 
 * Length
 * Width
 * Boot capacity
-* Battery size
-* Charging speed
+* Battery capacity
+* Charging power
 * WLTP range
 * Warranty
 
-Objective data is never manually scored.
+Technical Facts are never scored directly.
 
-It serves as the factual foundation for later analysis.
-
----
-
-# Stage 3 – Evidence Collection
-
-Evidence supports qualitative assessments.
-
-Every claim should be traceable to one or more sources.
-
-Examples:
-
-Claim:
-
-> Cabin is quiet at motorway speed.
-
-Supporting evidence:
-
-* Professional measurements
-* Multiple independent reviews
-* Owner reports
-
-Evidence should always include:
-
-* Source
-* Date
-* Confidence
+They establish the factual foundation for later evaluation.
 
 ---
 
-# Stage 4 – Quality Assessment
+# Stage 3 – Evidence
 
-Some characteristics cannot be measured directly.
+Evidence represents documented observations supported by one or more Sources.
 
-Examples:
+Examples include:
 
-* Software quality
+* Measured cabin noise
+* Verified charging curve
+* Independent winter range
+* OTA update history
+
+Every Evidence record shall include:
+
+* supporting Source;
+* confidence level;
+* documented observation.
+
+Evidence documents what is known.
+
+Evidence never contains interpretation.
+
+---
+
+# Stage 4 – Review
+
+Reviews transform Evidence into qualitative understanding.
+
+Examples include:
+
+* Ride comfort
 * Cabin refinement
-* Adaptive cruise behaviour
-* Steering feel
+* Software quality
+* Steering precision
 * Infotainment usability
 
-These characteristics receive evaluation scores.
+Every Review shall include:
 
-Every qualitative score must include:
+* interpretation;
+* confidence;
+* supporting Evidence.
 
-* Score
-* Confidence
-* Supporting evidence
+Reviews explain what the Evidence means.
+
+Reviews never replace Evidence.
 
 ---
 
-# Stage 5 – Weighted Scoring
+# Stage 5 – Criterion Score
 
-Only weighted criteria contribute to the total score.
+Each Criterion evaluates one aspect of ownership.
 
-Each criterion receives:
+Examples include:
 
-* Weight
-* Raw score
-* Weighted score
+* Driving Experience
+* Technology
+* Long-Term Ownership
+* Practicality
+* Price / Value
 
-Weights are maintained separately from the vehicle data.
+Each Criterion Score references:
 
-Changing weights never changes historical measurements.
+* one Configuration;
+* one Criterion;
+* one Review;
+* one Framework Version.
+
+Criterion Scores remain independently explainable.
+
+---
+
+# Stage 6 – Overall Score
+
+The Overall Score combines all weighted Criterion Scores.
+
+The Overall Score introduces no new information.
+
+It aggregates existing Criterion Scores according to the active Framework Version.
+
+The Overall Score is therefore fully reproducible.
 
 ---
 
 # Informational Criteria
 
-Some attributes are tracked without significantly affecting ranking.
+Some characteristics are documented without materially influencing the Overall Score.
 
-Examples:
+Examples include:
 
 * Ambient lighting
 * Premium audio
 * Panoramic roof
 * Decorative interior features
 
-These improve documentation but should have little or no influence on the final recommendation.
+These characteristics help distinguish otherwise similar Configurations but should not dominate the recommendation.
 
 ---
 
 # Excluded Criteria
 
-The following attributes are intentionally excluded from scoring:
+The following characteristics shall not contribute to framework scoring.
 
-* 0–100 km/h
+* 0–100 km/h acceleration
 * Top speed
 * Number of displays
 * Marketing claims
 * Influencer opinions
 * Launch hype
 
-These may be documented but never influence ranking.
+These characteristics may be documented but shall never influence the Overall Score.
 
 ---
 
 # Confidence Model
 
-Every qualitative assessment receives a confidence level.
+Every Review shall include a confidence level.
 
-## High
+| Level   | Meaning                                             |
+| ------- | --------------------------------------------------- |
+| High    | Multiple independent sources support the conclusion |
+| Medium  | Some supporting Evidence is available               |
+| Low     | Limited supporting Evidence                         |
+| Unknown | Insufficient Evidence is available                  |
 
-Supported by multiple independent high-quality sources.
+Unknown shall always be preferred over unsupported assumptions.
 
-## Medium
-
-Supported by limited evidence.
-
-## Low
-
-Preliminary information only.
-
-## Unknown
-
-No reliable evidence currently available.
-
-Unknown values are preferred over assumptions.
+Confidence reflects the quality of the supporting Evidence rather than the strength of the conclusion.
 
 ---
 
 # Explainability
 
-Every final score must be explainable.
+Every Overall Score shall remain fully explainable.
 
-The framework should always be able to answer:
+The framework shall always be able to answer:
 
-* Which criteria contributed positively?
-* Which criteria reduced the score?
-* Which evidence supports each conclusion?
+* Which Criteria contributed positively?
+* Which Criteria reduced the score?
+* Which Reviews supported each Criterion?
+* Which Evidence supported each Review?
+* Which Sources supported the Evidence?
 
-No score should exist without explanation.
+No score shall exist without a complete explanation path.
 
 ---
 
 # Weight Management
 
-Weights belong to the framework rather than individual vehicles.
+Criteria and weighting belong to the Framework rather than individual Configurations.
 
-Changing weights creates a new framework version.
+Changing weighting creates a new Framework Version.
 
-Vehicle evaluations should never mix weighting models.
+Configuration evaluations generated using different Framework Versions shall never be compared directly.
+
+Historical evaluations remain immutable.
 
 ---
 
 # Decision Logic
 
-The framework follows these rules:
+The framework follows the same decision process for every Configuration.
 
-1. Hard requirements determine eligibility.
-2. Objective facts establish the baseline.
-3. Evidence supports qualitative assessment.
-4. Weighted criteria produce the final score.
-5. Subjective preference may decide only when competing vehicles receive similar overall scores.
+1. Hard Requirements determine eligibility.
+2. Technical Facts establish the factual baseline.
+3. Evidence documents observations.
+4. Reviews interpret Evidence.
+5. Criterion Scores evaluate Reviews.
+6. The Overall Score aggregates weighted Criterion Scores.
+7. Personal preference may determine the final decision only when competing Configurations receive comparable Overall Scores.
 
 ---
 
@@ -249,17 +286,29 @@ The framework follows these rules:
 
 To preserve consistency:
 
-* Historical data should never be rewritten.
-* Evidence should never be discarded without reason.
-* Every significant methodology change creates a new framework version.
-* Vehicle evaluations remain tied to the framework version under which they were produced.
+* Technical Facts shall never be rewritten without justification.
+* Evidence shall never be removed without traceability.
+* Reviews shall remain linked to supporting Evidence.
+* Every significant methodology change creates a new Framework Version.
+* Every Overall Score remains permanently associated with the Framework Version under which it was generated.
 
 ---
 
-# Design Objective
+# Determinism
 
-The scoring model exists to support better decisions through transparency rather than mathematical complexity.
+Given:
 
-The preferred vehicle is not necessarily the one with the highest specification sheet.
+* identical Framework Version;
+* identical Technical Facts;
+* identical Evidence;
+* identical Reviews;
 
-It is the vehicle that best satisfies the defined requirements, supported by objective evidence and evaluated through a consistent methodology.
+the framework shall always produce identical Criterion Scores and Overall Scores.
+
+Deterministic behaviour is a mandatory property of the framework.
+
+---
+
+# Guiding Principle
+
+> **The scoring model does not evaluate vehicles directly. It evaluates Configurations by transforming documented facts into evidence, evidence into understanding, understanding into criterion scores and criterion scores into explainable recommendations.**

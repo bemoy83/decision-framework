@@ -1,8 +1,10 @@
 # EV Decision Framework
+
 ## Criteria & Weighting
-Version: 1.0
-Status: Locked
-Last Updated: 2026-07-04
+
+**Version:** 1.1
+**Status:** Locked
+**Last Updated:** 2026-07-06
 
 ---
 
@@ -10,63 +12,100 @@ Last Updated: 2026-07-04
 
 This document defines the evaluation criteria used by the EV Decision Framework.
 
-The purpose is to minimize long-term ownership regret rather than maximize specifications.
+The framework evaluates **Configurations**, not Vehicle models.
 
-The framework is designed around an ownership horizon of approximately 8–10 years.
+Criteria define **what** is evaluated.
 
-All future changes shall be version controlled.
+Weighting defines **how much** each criterion contributes to the final recommendation.
+
+The objective is to minimise long-term ownership regret rather than maximise specifications.
+
+The framework is designed around an ownership horizon of approximately **8–10 years**.
+
+All changes to criteria or weighting shall be version controlled.
 
 ---
 
 # Design Philosophy
 
-The framework is built around five principles.
+The criteria model follows six principles.
 
 1. Facts before opinions.
 2. Long-term ownership over first impressions.
-3. Objective data separated from subjective evaluation.
-4. Every score must be explainable.
+3. Objective information separated from subjective interpretation.
+4. Every score shall be explainable.
 5. Unknown is preferable to assumed.
+6. Personal preference belongs at the end of the decision process.
 
 ---
 
-# Evaluation Layers
+# Evaluation Model
 
-The framework consists of three independent layers.
+The framework intentionally separates different stages of evaluation.
 
-## Layer 1
+## Stage 1 – Facts
 
-Objective facts
+Objectively measurable information.
 
 Examples
 
-- Vehicle length
-- Battery capacity
-- WLTP
-- Price
-- Boot space
+* Vehicle dimensions
+* Battery capacity
+* Charging performance
+* WLTP range
+* Purchase price
+
+Facts never contain interpretation.
 
 ---
 
-## Layer 2
+## Stage 2 – Evidence
 
-Quality assessment
+Verified observations supported by one or more Sources.
 
 Examples
 
-- Software quality
-- Cabin noise
-- Adaptive cruise behaviour
-- Material quality
-- Build quality
+* Measured cabin noise
+* Independent winter range
+* Verified charging curve
+* OTA update history
+
+Evidence documents what is known.
+
+Evidence never assigns scores.
 
 ---
 
-## Layer 3
+## Stage 3 – Review
 
-Personal weighting
+Qualitative interpretation of documented Evidence.
 
-The final recommendation is generated using Bjørn's priorities.
+Examples
+
+* Driving refinement
+* Software quality
+* Cabin comfort
+* User interface quality
+
+Reviews interpret Evidence.
+
+Reviews never replace Evidence.
+
+---
+
+## Stage 4 – Criteria
+
+Framework criteria evaluate Reviews.
+
+Criteria determine what contributes to the final recommendation.
+
+---
+
+## Stage 5 – Weighting
+
+Weighting expresses the relative importance of each Criterion.
+
+Weighting reflects the framework philosophy rather than objective truth.
 
 ---
 
@@ -74,100 +113,122 @@ The final recommendation is generated using Bjørn's priorities.
 
 The following requirements are mandatory.
 
-| Requirement | Description |
-|-------------|-------------|
-| Vehicle type | Battery electric vehicle |
-| Maximum length | 4500 mm |
-| Ownership horizon | 8–10 years |
-| Primary vehicle | Yes |
-| Winter range | Approximately 300 km motorway driving in winter |
-| Market | Norway |
+| Requirement       | Description                                     |
+| ----------------- | ----------------------------------------------- |
+| Vehicle Type      | Battery electric vehicle (BEV)                  |
+| Maximum Length    | 4500 mm                                         |
+| Ownership Horizon | Approximately 8–10 years                        |
+| Primary Vehicle   | Yes                                             |
+| Winter Range      | Approximately 300 km motorway driving in winter |
+| Market            | Norway                                          |
 
-Vehicles failing a mandatory requirement are removed before scoring.
+Configurations failing a mandatory requirement shall not proceed to weighted evaluation.
 
 ---
 
 # Weighted Categories
 
-The following categories contribute to the total score.
+The following categories contribute to the Overall Score.
+
+---
 
 ## 1. Driving Experience
 
-Includes
-
-- Cabin noise
-- Ride comfort
-- Steering precision
-- Visibility
-- Driving ergonomics
-
 Importance
 
-Very High
+**Very High**
+
+Examples
+
+* Cabin noise
+* Ride comfort
+* Steering precision
+* Visibility
+* Driving ergonomics
+
+Focus
+
+Long-distance comfort, confidence and everyday usability.
 
 ---
 
 ## 2. Technology
 
-Includes
-
-- OTA updates
-- Apple CarPlay
-- Software responsiveness
-- Navigation
-- User interface
-- 360 Camera
-
 Importance
 
-Very High
+**Very High**
+
+Examples
+
+* OTA updates
+* Apple CarPlay
+* Software responsiveness
+* Navigation
+* User interface
+* 360 Camera
+
+Focus
+
+Technology should improve ownership rather than impress during a short demonstration.
 
 ---
 
 ## 3. Perceived Quality
 
-Includes
-
-- Materials
-- Build quality
-- Cabin feel
-- Controls
-- Software polish
-
 Importance
 
-High
+**High**
+
+Examples
+
+* Materials
+* Build quality
+* Cabin refinement
+* Controls
+* Software polish
+
+Focus
+
+The Configuration should feel well engineered throughout the ownership period.
 
 ---
 
 ## 4. Long-Term Ownership
 
-Includes
-
-- Reliability
-- Software support
-- Warranty
-- Brand maturity
-- Nordic suitability
-
 Importance
 
-High
+**High**
+
+Examples
+
+* Reliability
+* Software support
+* Warranty
+* Brand maturity
+* Nordic suitability
+
+Focus
+
+Long-term ownership quality is more important than launch-day excitement.
 
 ---
 
 ## 5. Practicality
 
-Includes
-
-- Cargo
-- Rear seat
-- Daily usability
-- Garage friendliness
-
 Importance
 
-Medium
+**Medium**
+
+Examples
+
+* Cargo capacity
+* Rear-seat usability
+* Everyday practicality
+* Garage friendliness
+
+Focus
+
+Daily convenience should outweigh occasional edge cases.
 
 ---
 
@@ -175,127 +236,140 @@ Medium
 
 Importance
 
-Medium
+**Medium**
 
 Price alone is never the objective.
 
-The framework evaluates value rather than lowest purchase cost.
+The framework evaluates long-term value rather than lowest purchase price.
+
+A more expensive Configuration may score higher if it meaningfully improves the ownership experience.
 
 ---
 
 ## 7. Charging & Efficiency
 
-Includes
-
-- Winter efficiency
-- Charging speed
-- Route planning
-
 Importance
 
-Medium
+**Medium**
+
+Examples
+
+* Winter efficiency
+* Charging speed
+* Route planning
+
+Focus
+
+Charging performance should support predictable long-distance travel under Norwegian conditions.
 
 ---
 
 # Informational Criteria
 
-The following are tracked but have little or no influence on the score.
+Some features are recorded because they contribute to the ownership experience, but they have little or no influence on the Overall Score.
 
-Examples
+Examples include:
 
-- Ambient lighting
-- Panoramic roof
-- Premium audio
-- Ventilated seats
-- Electric tailgate
+* Ambient lighting
+* Panoramic roof
+* Premium audio
+* Ventilated seats
+* Electric tailgate
+
+These features may help distinguish otherwise similar Configurations.
 
 ---
 
 # Excluded Criteria
 
-The following do not influence scoring.
+The following shall not contribute to framework scoring.
 
-- 0–100 km/h
-- Top speed
-- Number of displays
-- Marketing hype
-- Social media popularity
-- First impression "wow factor"
+* 0–100 km/h acceleration
+* Top speed
+* Number of displays
+* Marketing hype
+* Social media popularity
+* First impression "wow factor"
+
+These characteristics may be interesting but are not considered meaningful predictors of long-term ownership satisfaction.
 
 ---
 
 # Decision Rule
 
-If two vehicles receive approximately equal scores,
-subjective preference may determine the final decision.
+The framework provides decision support.
 
-If one vehicle clearly scores higher,
-the framework should challenge personal bias.
+The purchaser makes the final decision.
+
+If two Configurations receive comparable Overall Scores, subjective preference may determine the final choice.
+
+If one Configuration receives a clearly stronger evaluation, the framework should encourage reconsideration of personal bias before overriding the result.
 
 ---
 
 # Evidence Policy
 
-Every evaluation shall be supported by evidence.
+Every Review shall be supported by documented Evidence.
 
-Preferred sources
+Preferred Evidence hierarchy:
 
-Tier A
+## Tier A
 
-- Manufacturer
-- Euro NCAP
-- EV Database
-- ADAC
-- Objective winter testing
+Objective and independently verifiable sources.
 
-Tier B
+Examples:
 
-- Professional reviews
+* Manufacturer documentation
+* Euro NCAP
+* EV Database
+* ADAC
+* Independent winter testing
 
-Tier C
+---
 
-- Long-term ownership reports
+## Tier B
+
+Professional automotive reviews.
+
+---
+
+## Tier C
+
+Long-term ownership experience.
+
+No individual source shall determine an evaluation on its own.
+
+Confidence should increase when multiple independent sources support the same conclusion.
 
 ---
 
 # Confidence
 
-Every subjective assessment shall include a confidence level.
+Every qualitative Review shall include a confidence level.
 
-High
+| Level   | Meaning                                             |
+| ------- | --------------------------------------------------- |
+| High    | Multiple independent sources support the conclusion |
+| Medium  | Some supporting Evidence is available               |
+| Low     | Limited supporting Evidence                         |
+| Unknown | Insufficient Evidence is available                  |
 
-Multiple independent sources.
-
-Medium
-
-Some evidence available.
-
-Low
-
-Preliminary information.
-
-Unknown
-
-Insufficient information available.
-
-Unknown is always preferred over assumptions.
+Unknown shall always be preferred over unsupported assumptions.
 
 ---
 
 # Versioning
 
-Criteria and weights are locked before vehicle evaluation begins.
+Criteria and weighting shall be locked before evaluating Configurations.
 
-Changes require a new framework version.
+Changes require a new Framework Version.
 
-Example
+Historical Configuration evaluations shall remain associated with the Framework Version under which they were produced.
 
-Version 1.0
+Scores generated using different Framework Versions shall never be compared directly.
 
-Initial release
+---
 
-Version 2.0
+# Guiding Principle
 
-Updated weighting after framework redesign
-
-Vehicle scores shall never be mixed across framework versions.
+> **Criteria define what matters. Weighting expresses priorities. Evidence supports conclusions. The framework evaluates Configurations while preserving transparency, explainability and long-term ownership focus.**

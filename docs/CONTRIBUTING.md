@@ -58,6 +58,34 @@ Data never defines methodology.
 
 ---
 
+# Framework Terminology
+
+The framework uses a precise terminology.
+
+Contributors should use these terms consistently throughout the repository.
+
+| Term | Definition |
+|------|------------|
+| Vehicle | The shared identity of a vehicle model. A Vehicle groups one or more Configurations. |
+| Configuration | A purchasable product. Configurations are the primary evaluation target of the framework. |
+| Technical | A measurable technical fact belonging to either a Vehicle or a Configuration. |
+| Equipment Definition | A reusable definition of a feature, independent of availability. |
+| Equipment | The availability of an Equipment Definition for a specific Configuration. |
+| Source | The origin of information. Sources provide information but never interpretation. |
+| Evidence | A documented observation supported by one or more Sources. Evidence answers: "What do we know?" |
+| Review | A qualitative interpretation of Evidence. Reviews answer: "What does the evidence mean?" |
+| Criterion | A framework-defined aspect of ownership that is evaluated. |
+| Score | A calculated evaluation produced by applying a Criterion to a Review under a specific Framework Version. |
+| Recommendation | Decision support produced from the Overall Score. Recommendations always refer to Configurations. |
+
+When writing documentation:
+
+- Use **Vehicle** when referring to the shared model.
+- Use **Configuration** when referring to scoring, ranking, comparison or purchase recommendations.
+- Avoid using the two terms interchangeably.
+
+---
+
 # Before Contributing
 
 Please read the documentation in the following order.
