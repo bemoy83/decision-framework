@@ -2,9 +2,9 @@
 
 ## Entity Model
 
-**Version:** 1.0
+**Version:** 1.1
 **Status:** Locked
-**Last Updated:** 2026-07-04
+**Last Updated:** 2026-07-06
 
 ---
 
@@ -16,32 +16,45 @@ Entities represent the fundamental building blocks of the framework.
 
 Each entity has:
 
-* a unique identity,
-* clearly defined ownership,
-* relationships to other entities,
-* and a specific responsibility.
+* a unique identity;
+* clearly defined ownership;
+* explicit relationships;
+* and a single responsibility.
 
-The entity model is independent of any implementation technology.
+The entity model is implementation-independent and applies equally to spreadsheets, databases and future software implementations.
 
 ---
 
 # Design Principles
 
-The entity model follows five principles.
+The entity model follows six principles.
 
-1. Every entity has one clear responsibility.
-2. Every entity has a unique identifier.
-3. Data should exist in only one place.
-4. Relationships should be explicit.
-5. Entities should remain reusable across implementations.
+1. Every entity has one responsibility.
+2. Every entity has one identity.
+3. Every entity owns only the information it creates.
+4. Relationships between entities are explicit.
+5. Data duplication should be minimized.
+6. Entities remain independent of implementation technology.
+
+---
+
+# Ownership
+
+The framework distinguishes between ownership and references.
+
+An entity owns only the information it creates.
+
+An entity may reference information owned by another entity.
+
+Ownership determines where information belongs.
+
+References determine how information is connected.
 
 ---
 
 # Core Entities
 
-The framework currently defines the following entities.
-
-```text
+```text id="z6mxik"
 Vehicle
 Configuration
 Technical
@@ -60,7 +73,9 @@ Decision
 
 # Vehicle
 
-Represents a physical vehicle model.
+## Purpose
+
+Represents the shared identity of a vehicle model.
 
 Examples
 
@@ -74,22 +89,27 @@ VehicleID
 
 Owns
 
-* identity
 * manufacturer
 * model
 * platform
 * lifecycle status
+* shared characteristics
 
-Does NOT own
+Vehicle may also own:
 
-* equipment
-* reviews
-* technical specifications
-* scores
+* shared Technical records;
+* shared Evidence;
+* shared Reviews.
+
+Vehicle does **not** represent a purchasable product.
+
+Vehicle groups one or more Configurations.
 
 ---
 
 # Configuration
+
+## Purpose
 
 Represents a purchasable vehicle configuration.
 
@@ -97,7 +117,7 @@ Examples
 
 * Exclusive
 * GT-Line
-* Tech Pack
+* Techno
 
 Identity
 
@@ -113,19 +133,25 @@ Owns
 * market
 * pricing
 * package information
+* configuration-specific characteristics
+
+Configuration is the primary evaluation target of the framework.
+
+All rankings, comparisons and purchase recommendations refer to Configurations.
 
 ---
 
 # Technical
 
-Represents a single measurable technical characteristic of a Vehicle or Configuration.
+## Purpose
+
+Represents one measurable technical characteristic.
 
 Examples
 
 * Overall Length
 * Wheelbase
-* Battery Gross Capacity
-* Battery Net Capacity
+* Battery Capacity
 * Maximum DC Charging Power
 * WLTP Range
 * Kerb Weight
@@ -136,31 +162,29 @@ TechnicalID
 
 Owns
 
-* Property
-* Value
-* Unit
-* Source
-* Confidence
-* Last Updated
+* property
+* value
+* unit
+* confidence
+* source reference
+* last updated
 
 Technical represents verified factual information.
 
-Technical data never contains interpretation, evaluation or recommendations.
+Technical never contains interpretation or evaluation.
 
 Each Technical record belongs to either:
 
 * one Vehicle; or
 * one Configuration,
 
-depending on the scope of the characteristic.
-
-Whenever a specification applies to every configuration, it should belong to the Vehicle.
-
-Configuration-specific specifications should only be stored at the Configuration level.
+depending on where the characteristic remains true.
 
 ---
 
 # Criterion
+
+## Purpose
 
 Represents one evaluation criterion.
 
@@ -182,9 +206,15 @@ Owns
 * weighting
 * requirement type
 
+Criteria define **what** is evaluated.
+
+They never store evaluation results.
+
 ---
 
 # EquipmentDefinition
+
+## Purpose
 
 Represents a reusable equipment concept.
 
@@ -202,29 +232,22 @@ EquipmentDefinitionID
 
 Owns
 
-* Name
-* Category
-* Description
-* Weighted Status
+* name
+* category
+* description
+* weighted status
 
-Equipment Definitions describe *what* a feature is.
+EquipmentDefinition describes **what a feature is**.
 
-They do not describe whether a specific Configuration includes that feature.
-
-Availability is managed by the Equipment entity.
+It never describes availability.
 
 ---
 
 # Equipment
 
-Represents the availability of an Equipment Definition for a specific Configuration.
+## Purpose
 
-Examples
-
-* 360 Camera
-* Matrix LED
-* OTA Updates
-* Ambient Lighting
+Represents the availability of an EquipmentDefinition for one Configuration.
 
 Identity
 
@@ -232,82 +255,35 @@ EquipmentID
 
 Owns
 
-- Availability
-- Configuration
-- Confidence
-- Source
-
-Equipment references exactly one EquipmentDefinition.
-
----
-
-# Evidence
-
-Represents a single factual observation supporting a claim.
-
-Examples
-
-Measured cabin noise
-
-Verified charging curve
-
-Independent winter range
-
-Identity
-
-EvidenceID
-
-Owns
-
-* claim
-* evidence
+* availability
 * confidence
-* supporting source
+* source reference
 
-Evidence never contains conclusions.
+References
 
----
+* Configuration
+* EquipmentDefinition
 
-# Review
+Equipment answers:
 
-Represents a qualitative assessment.
+> Does this Configuration include this feature?
 
-Examples
-
-Software usability
-
-Ride comfort
-
-Steering precision
-
-Identity
-
-ReviewID
-
-Owns
-
-* category
-* summary
-* score
-* confidence
-
-Reviews interpret evidence.
-
-They do not replace it.
+Equipment never defines the feature itself.
 
 ---
 
 # Source
 
-Represents one information source.
+## Purpose
+
+Represents the origin of information.
 
 Examples
 
-Manufacturer
-
-Motor.no
-
-Euro NCAP
+* Manufacturer
+* Motor.no
+* Euro NCAP
+* Independent reviewers
 
 Identity
 
@@ -321,15 +297,93 @@ Owns
 * publication date
 * retrieval date
 
-Sources never evaluate.
+Sources provide information.
 
-They only provide information.
+Sources never interpret information.
+
+---
+
+# Evidence
+
+## Purpose
+
+Represents a documented observation.
+
+Examples
+
+* Measured cabin noise
+* Verified charging curve
+* Independent winter range
+* OTA update history
+
+Identity
+
+EvidenceID
+
+Owns
+
+* observation
+* confidence
+* supporting source
+
+References
+
+* Vehicle or Configuration
+* Source
+
+Evidence answers:
+
+> What do we know?
+
+Evidence never contains interpretation.
+
+Evidence never assigns scores.
+
+---
+
+# Review
+
+## Purpose
+
+Represents a qualitative interpretation of Evidence.
+
+Examples
+
+* Ride comfort
+* Software quality
+* Steering precision
+* Cabin refinement
+
+Identity
+
+ReviewID
+
+Owns
+
+* category
+* summary
+* confidence
+
+References
+
+* Vehicle or Configuration
+* Evidence
+
+Review answers:
+
+> What does the evidence mean?
+
+Reviews interpret Evidence.
+
+Reviews never modify Evidence.
 
 ---
 
 # Score
 
-Represents one calculated framework result.
+## Purpose
+
+Represents one calculated framework evaluation.
 
 Identity
 
@@ -337,28 +391,37 @@ ScoreID
 
 Owns
 
-* criterion
-* raw score
+* criterion score
 * weighted score
 * explanation
 
+References
+
+* Configuration
+* Review
+* FrameworkVersion
+
 Scores are generated.
 
-They are never manually entered.
+Scores are never manually entered.
 
 ---
 
 # FrameworkVersion
 
+## Purpose
+
 Represents one released framework definition.
 
 Examples
 
-1.0
+* 1.0
+* 1.1
+* 2.0
 
-1.1
+Identity
 
-2.0
+FrameworkVersion
 
 Owns
 
@@ -366,23 +429,23 @@ Owns
 * weighting version
 * schema version
 
-Vehicle evaluations always reference one framework version.
+Framework Versions guarantee reproducibility.
+
+Historical versions are immutable.
 
 ---
 
 # Decision
 
-Represents a documented project decision.
+## Purpose
+
+Represents one documented architectural decision.
 
 Examples
 
-Framework changes
-
-Weighting updates
-
-Methodology revisions
-
-ADR references
+* ADR acceptance
+* methodology changes
+* framework revisions
 
 Identity
 
@@ -395,27 +458,30 @@ Owns
 * date
 * framework version
 
+Decisions document why the framework evolved.
+
+They do not implement changes themselves.
+
 ---
 
-# Entity Ownership
+# Entity Responsibilities
 
-Each entity owns only its own data.
+Each entity owns only the information it creates.
 
-Example
-
-Vehicle owns:
-
-* manufacturer
-* model
-
-Vehicle does NOT own:
-
-* WLTP
-* Reviews
-* Equipment
-* Sources
-
-Those belong to their respective entities.
+| Entity              | Responsibility        |
+| ------------------- | --------------------- |
+| Vehicle             | Shared identity       |
+| Configuration       | Purchasable product   |
+| Technical           | Measurable facts      |
+| EquipmentDefinition | Feature definition    |
+| Equipment           | Feature availability  |
+| Source              | Information origin    |
+| Evidence            | Verified observations |
+| Review              | Interpretation        |
+| Criterion           | Evaluation definition |
+| Score               | Calculated evaluation |
+| FrameworkVersion    | Framework identity    |
+| Decision            | Architectural history |
 
 ---
 
@@ -427,15 +493,19 @@ Examples
 
 Vehicle
 
-May receive new reviews.
+May gain new Configurations.
 
-Review
+Configuration
 
-May receive stronger evidence.
+May gain new Equipment.
 
 Evidence
 
-May receive additional supporting sources.
+May gain stronger supporting Sources.
+
+Review
+
+May evolve as new Evidence becomes available.
 
 FrameworkVersion
 
@@ -445,9 +515,10 @@ Never changes after release.
 
 # Entity Independence
 
-The framework should allow future implementations using:
+The entity model supports implementations using:
 
 * Excel
+* Google Sheets
 * SQLite
 * PostgreSQL
 * REST APIs
@@ -460,8 +531,4 @@ without changing entity definitions.
 
 # Guiding Principle
 
-Entities represent knowledge.
-
-Relationships connect knowledge.
-
-The framework evaluates relationships rather than individual entities in isolation.
+> **Entities own knowledge. Relationships connect knowledge. Reviews interpret knowledge. Scores evaluate interpretations.**

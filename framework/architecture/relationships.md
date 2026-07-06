@@ -2,9 +2,9 @@
 
 ## Relationships Model
 
-**Version:** 1.0
+**Version:** 1.1
 **Status:** Locked
-**Last Updated:** 2026-07-04
+**Last Updated:** 2026-07-06
 
 ---
 
@@ -12,58 +12,77 @@
 
 This document defines the logical relationships between entities in the EV Decision Framework.
 
-Relationships describe how entities interact while maintaining data integrity, traceability and explainability.
+Relationships describe how entities reference one another while preserving ownership, traceability and data integrity.
 
-The model is implementation-independent and applies equally to spreadsheets, relational databases and future APIs.
-
----
-
-# Design Principles
-
-Relationships should follow these principles:
-
-* Every relationship must be explicit.
-* Relationships should minimise data duplication.
-* Parent entities own identity.
-* Child entities reference identity.
-* Relationships should remain stable across framework versions.
+The relationship model is implementation-independent and applies equally to spreadsheets, relational databases and future APIs.
 
 ---
 
-# Entity Relationship Overview
+# Guiding Principles
+
+Relationships follow four principles.
+
+1. Ownership is explicit.
+2. References are explicit.
+3. Data duplication should be minimized.
+4. Information flows in one direction only.
+
+---
+
+# Ownership vs References
+
+The framework distinguishes between ownership and references.
+
+Ownership determines where information belongs.
+
+References describe how entities use information owned elsewhere.
+
+An entity should own only the information it creates.
+
+An entity may reference information owned by another entity.
+
+---
+
+# Relationship Overview
 
 ```text
-FrameworkVersion
-        │
-        │
-        ▼
-Criteria ───────────────┐
-                        │
-                        ▼
-                     Score
-                        ▲
-                        │
-Vehicle ────────────────┼──────────────┐
-│                       │              │
-│                       │              │
-▼                       ▼              ▼
-Configuration      Review         Technical
-                        ▲
-                        │
-                        ▼
-                    Evidence
-                        ▲
-                        │
-                        ▼
-                     Source
-
 Vehicle
-    │
-    ▼
+│
+├── Configuration
+│      │
+│      ├── Technical
+│      ├── Equipment
+│      ├── Review
+│      └── Score
+│
+├── Technical
+├── Review
+└── Evidence
+
 Equipment
     │
     ▼
 EquipmentDefinition
+
+Evidence
+    │
+    ▼
+Source
+
+Review
+    │
+    ▼
+Evidence
+
+Score
+    │
+    ▼
+Review
+
+FrameworkVersion
+    │
+    ▼
+Score
 
 Decision
     │
@@ -81,17 +100,20 @@ Relationship
 
 **One-to-Many (1:N)**
 
-A vehicle may exist in multiple market configurations.
+A Vehicle may contain multiple purchasable Configurations.
 
-Example
+Each Configuration belongs to exactly one Vehicle.
 
-KIA_EV2
+Examples
 
-* Standard
-* Exclusive
-* GT-Line
+* Kia EV2
 
-Each configuration belongs to exactly one vehicle.
+  * Exclusive
+  * GT-Line
+
+Vehicle represents the shared product.
+
+Configuration represents the purchasable product.
 
 ---
 
@@ -101,28 +123,45 @@ Relationship
 
 **One-to-Many (1:N)**
 
-Each vehicle has multiple technical attributes.
+Vehicle owns Technical records that are true for every Configuration.
 
 Examples
 
-* Length
-* Battery
-* WLTP
-* Charging speed
+* Wheelbase
+* Platform
+* Body Length
 
-Each technical record belongs to one vehicle.
+Configuration-specific specifications belong to Configuration instead.
 
 ---
 
-## Vehicle → Equipment
+## Configuration → Technical
 
 Relationship
 
 **One-to-Many (1:N)**
 
-Each vehicle contains multiple equipment records.
+Configuration owns Technical records that differ between purchasable variants.
 
-Availability is stored per configuration where applicable.
+Examples
+
+* Battery capacity
+* Wheel size
+* Charging capability
+
+---
+
+## Configuration → Equipment
+
+Relationship
+
+**One-to-Many (1:N)**
+
+A Configuration may contain multiple Equipment records.
+
+Equipment describes availability only.
+
+Equipment never defines the feature itself.
 
 ---
 
@@ -132,48 +171,43 @@ Relationship
 
 **Many-to-One (N:1)**
 
-Equipment records reference a shared equipment definition.
+Every Equipment record references exactly one EquipmentDefinition.
 
-Example
+EquipmentDefinition defines the feature.
 
-Many vehicles reference:
-
-EQ_360_CAMERA
-
-The definition exists only once.
+Equipment defines whether that feature is available.
 
 ---
 
-## Vehicle → Review
+## Vehicle → Evidence
 
 Relationship
 
 **One-to-Many (1:N)**
 
-A vehicle may receive multiple reviews.
+Vehicle may own Evidence that applies to every Configuration.
 
 Examples
 
-* Software
-* Ride Comfort
-* Steering
-* Cabin Noise
-
-Each review belongs to one vehicle.
+* Measured cabin noise
+* Crash test results
+* Vehicle-wide efficiency measurements
 
 ---
 
-## Review → Evidence
+## Configuration → Evidence
 
 Relationship
 
 **One-to-Many (1:N)**
 
-A review should be supported by one or more evidence records.
+Configuration may own Evidence describing trim-specific behaviour.
 
-Evidence strengthens confidence.
+Examples
 
-Reviews summarise evidence.
+* Premium audio measurements
+* Matrix LED observations
+* 360 Camera behaviour
 
 ---
 
@@ -183,91 +217,91 @@ Relationship
 
 **Many-to-One (N:1)**
 
-Multiple evidence records may originate from the same source.
+Every Evidence record references at least one Source.
 
-Example
+Evidence always answers:
 
-Motor.no
+> What do we know?
 
-↓
-
-Cabin noise
-
-↓
-
-Charging curve
-
-↓
-
-Software observations
-
-The source exists only once.
+Evidence never contains interpretation.
 
 ---
 
-## Technical → Source
-
-Relationship
-
-**Many-to-One (N:1)**
-
-Technical data should reference the source used to verify the specification.
-
----
-
-## Equipment → Source
-
-Relationship
-
-**Many-to-One (N:1)**
-
-Equipment availability should reference the official source whenever possible.
-
----
-
-## Score → Criterion
-
-Relationship
-
-**Many-to-One (N:1)**
-
-Every calculated score references exactly one criterion.
-
----
-
-## Score → Vehicle
-
-Relationship
-
-**Many-to-One (N:1)**
-
-Each vehicle receives one score per criterion.
-
-The total score is derived from these individual criterion scores.
-
----
-
-## FrameworkVersion → Criteria
+## Vehicle → Review
 
 Relationship
 
 **One-to-Many (1:N)**
 
-Each framework version defines one complete criteria model.
+Vehicle may contain Reviews describing characteristics shared across all Configurations.
 
-Historical framework versions remain immutable.
+Examples
+
+* Ride quality
+* Steering feel
+* General cabin refinement
 
 ---
 
-## FrameworkVersion → Score
+## Configuration → Review
 
 Relationship
 
 **One-to-Many (1:N)**
 
-Every calculated score references the framework version used during evaluation.
+Configuration may contain Reviews describing trim-specific characteristics.
 
-Historical evaluations remain reproducible.
+Examples
+
+* Premium audio quality
+* Camera usability
+* Interior equipment
+
+---
+
+## Review → Evidence
+
+Relationship
+
+**One-to-Many (1:N)**
+
+Every Review references one or more Evidence records.
+
+Evidence supports the Review.
+
+Reviews interpret Evidence.
+
+Evidence does not reference Reviews.
+
+This relationship intentionally preserves a one-way flow of information.
+
+Future framework versions may replace this with a more normalized many-to-many model if required.
+
+---
+
+## Score → Review
+
+Relationship
+
+**Many-to-One (N:1)**
+
+Every Criterion Score references one Review.
+
+Scores evaluate Reviews.
+
+Reviews do not evaluate Scores.
+
+---
+
+## Score → FrameworkVersion
+
+Relationship
+
+**Many-to-One (N:1)**
+
+Every Score references the Framework Version used during evaluation.
+
+This guarantees reproducibility.
 
 ---
 
@@ -277,129 +311,100 @@ Relationship
 
 **Many-to-One (N:1)**
 
-Every architecture decision references the framework version that introduced it.
+Every architecture decision references the Framework Version under which it became effective.
 
 ---
 
-# Relationship Ownership
+# Ownership Summary
 
-Ownership defines where information originates.
-
-| Parent           | Child         |
-| ---------------- | ------------- |
-| Vehicle          | Configuration |
-| Vehicle          | Technical     |
-| Vehicle          | Equipment     |
-| Vehicle          | Review        |
-| Review           | Evidence      |
-| Source           | Evidence      |
-| Criterion        | Score         |
-| FrameworkVersion | Criteria      |
-
-Parents own identity.
-
-Children reference identity.
+| Entity              | Owns                                                                                           |
+| ------------------- | ---------------------------------------------------------------------------------------------- |
+| Vehicle             | Shared identity, shared Technical, shared Evidence, shared Reviews                             |
+| Configuration       | Purchasable characteristics, Equipment, configuration-specific Technical, Evidence and Reviews |
+| EquipmentDefinition | Feature definition                                                                             |
+| Equipment           | Availability                                                                                   |
+| Source              | Information origin                                                                             |
+| Evidence            | Verified observations                                                                          |
+| Review              | Interpretation                                                                                 |
+| Score               | Evaluation                                                                                     |
+| FrameworkVersion    | Framework identity                                                                             |
 
 ---
 
 # Referential Integrity
 
-The framework should enforce the following rules.
+Every implementation shall enforce the following relationships.
 
-## Mandatory Relationships
+A Configuration shall reference one Vehicle.
 
-A Review:
+Technical shall reference either one Vehicle or one Configuration.
 
-* must reference a Vehicle.
+Equipment shall reference:
 
-An Evidence record:
+* one Configuration;
+* one EquipmentDefinition.
 
-* must reference a Review.
-* must reference at least one Source.
+Evidence shall reference:
 
-A Score:
+* one Vehicle or one Configuration;
+* at least one Source.
 
-* must reference a Vehicle.
-* must reference a Criterion.
-* must reference a FrameworkVersion.
+Review shall reference:
 
-A Technical record:
+* one Vehicle or one Configuration;
+* at least one Evidence record.
 
-* must reference a Vehicle.
+Score shall reference:
 
----
+* one Configuration;
+* one Review;
+* one FrameworkVersion.
 
-## Optional Relationships
-
-Some entities may legitimately exist without children.
-
-Examples
-
-A newly added vehicle may temporarily have:
-
-* no reviews
-* no scores
-* incomplete equipment
-
-The framework should represent missing information as incomplete rather than incorrect.
+Broken references are considered implementation errors.
 
 ---
 
-# Relationship Constraints
+# Information Flow
 
-The framework intentionally avoids circular dependencies.
-
-Information should always flow in one direction.
+Information always flows forward.
 
 ```text
 Source
-    ↓
+    │
+    ▼
 Evidence
-    ↓
+    │
+    ▼
 Review
-    ↓
-Score
+    │
+    ▼
+Criterion Score
+    │
+    ▼
+Overall Score
 ```
 
-Scores must never modify reviews.
+No relationship should introduce reverse information flow.
 
-Reviews must never modify evidence.
+Scores never modify Reviews.
 
-Evidence must never modify source data.
+Reviews never modify Evidence.
+
+Evidence never modifies Sources.
 
 ---
 
-# Traceability
+# Unknown Values
 
-Every recommendation should be traceable.
+Unknown information remains Unknown until supported by Evidence.
 
-Example
-
-Final Score
-
-↓
-
-Criterion
-
-↓
-
-Review
-
-↓
-
-Evidence
-
-↓
-
-Source
-
-This chain allows every conclusion to be explained.
+Unknown values shall never be replaced by assumptions.
 
 ---
 
 # Future Compatibility
 
-The relationship model has been designed to support:
+The relationship model supports future migration to:
 
 * Excel
 * Google Sheets
@@ -407,16 +412,13 @@ The relationship model has been designed to support:
 * PostgreSQL
 * REST APIs
 * GraphQL
-* Web applications
 
-without modification.
+without conceptual redesign.
+
+Future framework versions may introduce additional normalization where justified by real implementation experience.
 
 ---
 
 # Guiding Principle
 
-Relationships create meaning.
-
-Individual entities store information.
-
-The framework derives knowledge by connecting entities through explicit, traceable relationships.
+> **Entities own information. Relationships create knowledge. References preserve traceability.**

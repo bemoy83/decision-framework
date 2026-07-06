@@ -2,9 +2,9 @@
 
 ## Data Flow
 
-**Version:** 1.0
+**Version:** 1.1
 **Status:** Locked
-**Last Updated:** 2026-07-04
+**Last Updated:** 2026-07-06
 
 ---
 
@@ -12,61 +12,82 @@
 
 This document defines how information flows through the EV Decision Framework.
 
-It describes the transformation of raw information into explainable recommendations.
+The framework transforms raw information into explainable, traceable and reproducible purchase recommendations.
 
-The data flow is independent of implementation technology and applies equally to spreadsheets, databases and future applications.
+The data flow is independent of implementation technology and applies equally to spreadsheets, databases and future software implementations.
 
 ---
 
 # Guiding Principle
 
-The framework does not score vehicles directly.
+The framework never evaluates raw data directly.
 
-Instead, it progressively transforms information through a series of increasingly meaningful stages.
+Information progresses through a series of increasingly meaningful stages.
 
-Each stage adds interpretation while preserving traceability to the previous stage.
+Each stage adds understanding while preserving traceability to the previous stage.
+
+Every stage has one responsibility.
 
 ---
 
 # High-Level Flow
 
-```text
+```text id="efdjlwm"
 Vehicle
-    │
-    ▼
+        │
+        ▼
 Configuration
-    │
-    ▼
-Technical Data
-Equipment
-    │
-    ▼
-Evidence
-    │
-    ▼
-Review
-    │
-    ▼
-Criterion Score
-    │
-    ▼
-Overall Score
-    │
-    ▼
-Recommendation
+        │
+        ├────────────┐
+        ▼            ▼
+Technical      Equipment
+        │            │
+        └──────┬─────┘
+               ▼
+           Evidence
+               │
+               ▼
+            Review
+               │
+               ▼
+        Criterion Score
+               │
+               ▼
+         Overall Score
+               │
+               ▼
+        Recommendation
 ```
 
-Each stage consumes information from the previous stage.
+Every stage consumes information from previous stages.
 
 No stage should bypass another unless explicitly documented.
 
 ---
 
+# Information Sources
+
+Before entering the framework, information originates from one or more Sources.
+
+Examples include:
+
+* manufacturer specifications;
+* independent testing;
+* owner reports;
+* certification bodies;
+* professional reviews.
+
+Sources are external to the evaluation process.
+
+They provide information but never interpretation.
+
+---
+
 # Stage 1 – Vehicle
 
-Purpose
+## Purpose
 
-Represents the product being evaluated.
+Represents the shared identity of a vehicle model.
 
 Examples
 
@@ -76,25 +97,28 @@ Examples
 
 Produces
 
-Vehicle identity.
+* Vehicle identity
+* Shared characteristics
 
 Consumes
 
 Nothing.
 
+Vehicle establishes the foundation upon which Configurations are built.
+
 ---
 
 # Stage 2 – Configuration
 
-Purpose
+## Purpose
 
-Represents a purchasable configuration.
+Represents a purchasable product.
 
 Examples
 
-* Base
 * Exclusive
 * GT-Line
+* Techno
 
 Produces
 
@@ -104,45 +128,53 @@ Consumes
 
 Vehicle.
 
+Configuration is the framework's primary evaluation target.
+
+All rankings and recommendations refer to Configurations.
+
 ---
 
-# Stage 3 – Technical Data
+# Stage 3 – Technical
 
-Purpose
+## Purpose
 
 Stores measurable facts.
 
 Examples
 
-* Length
+* Vehicle length
 * Battery capacity
 * Charging speed
+* Wheelbase
 * Boot volume
 * WLTP range
 
 Produces
 
-Verified factual information.
+Verified technical information.
 
 Consumes
 
-Configuration or Vehicle, depending on the specification.
+Vehicle or Configuration.
 
-Technical data never contains opinions.
+Technical never contains interpretation.
+
+Technical never contains recommendations.
 
 ---
 
 # Stage 4 – Equipment
 
-Purpose
+## Purpose
 
-Describes available equipment.
+Describes feature availability.
 
 Examples
 
 * 360 Camera
 * Matrix LED
-* Heated steering wheel
+* Heated Steering Wheel
+* OTA Updates
 
 Produces
 
@@ -150,21 +182,23 @@ Equipment availability.
 
 Consumes
 
-Configuration.
+Configuration and EquipmentDefinition.
 
-Equipment represents availability only.
+Equipment answers:
 
-It does not evaluate usefulness.
+> Is this feature available?
+
+Equipment never evaluates the usefulness of a feature.
 
 ---
 
 # Stage 5 – Evidence
 
-Purpose
+## Purpose
 
-Transforms raw information into documented observations.
+Transforms factual information into documented observations.
 
-Evidence should answer:
+Evidence answers:
 
 > What do we know?
 
@@ -172,45 +206,52 @@ Examples
 
 * Measured cabin noise
 * Verified charging curve
-* Winter range test
-* Software update history
+* Winter range measurement
+* OTA update history
 
-Evidence should always reference one or more sources.
+Evidence references one or more Sources.
 
-Evidence never assigns scores.
+Evidence never contains interpretation.
+
+Evidence never contains evaluation.
 
 ---
 
 # Stage 6 – Review
 
-Purpose
+## Purpose
 
-Transforms evidence into qualitative assessment.
+Transforms documented observations into qualitative understanding.
 
-Reviews answer:
+Review answers:
 
 > What does the evidence mean?
 
 Examples
 
 * Ride comfort
-* Software quality
-* Visibility
 * Cabin refinement
+* Software quality
+* Steering precision
+* Visibility
 
-Reviews should reference one or more Evidence records.
+Every Review references one or more Evidence records.
 
-Multiple reviews may reuse the same evidence.
+Evidence supports Reviews.
+
+Reviews interpret Evidence.
+
+Evidence never references Reviews.
 
 ---
 
 # Stage 7 – Criterion Score
 
-Purpose
+## Purpose
 
-Transforms reviews into framework-specific scores.
+Transforms Reviews into framework-specific evaluations.
 
-Each score represents one criterion.
+Each Criterion Score evaluates one Criterion.
 
 Examples
 
@@ -219,106 +260,106 @@ Examples
 * Practicality
 * Long-Term Ownership
 
-Scores should reference:
+Every Criterion Score references:
 
-* Criterion
-* Review
-* Framework Version
+* one Configuration;
+* one Review;
+* one Framework Version.
 
-Scores should remain reproducible.
+Criterion Scores remain reproducible.
 
 ---
 
 # Stage 8 – Overall Score
 
-Purpose
+## Purpose
 
-Aggregates criterion scores using the active weighting model.
+Aggregates Criterion Scores using the active framework weighting.
 
 Produces
 
-Final framework score.
+Final framework evaluation.
 
-The overall score contains no new information.
+Overall Scores introduce no new knowledge.
 
-It only aggregates existing criterion scores.
+They aggregate existing Criterion Scores only.
 
 ---
 
 # Stage 9 – Recommendation
 
-Purpose
+## Purpose
 
-Transforms the overall score into a decision-support recommendation.
+Transforms Overall Scores into decision support.
 
-The recommendation should always explain:
+Recommendations explain:
 
-* strengths
-* weaknesses
-* trade-offs
-* uncertainty
+* strengths;
+* weaknesses;
+* trade-offs;
+* uncertainty.
 
-The framework recommends.
+The framework provides recommendations.
 
-The user decides.
+The user makes the final decision.
 
 ---
 
 # Information Flow
 
-Information should always move forward.
+Information always moves forward.
 
-```text
+```text id="uhoezjz"
 Source
-    │
-    ▼
+        │
+        ▼
 Evidence
-    │
-    ▼
+        │
+        ▼
 Review
-    │
-    ▼
+        │
+        ▼
 Criterion Score
-    │
-    ▼
+        │
+        ▼
 Overall Score
 ```
 
-Information should never move backwards.
+Reverse information flow is not permitted.
 
-Scores must never modify reviews.
+Scores never modify Reviews.
 
-Reviews must never modify evidence.
+Reviews never modify Evidence.
 
-Evidence must never modify source data.
+Evidence never modifies Sources.
 
 ---
 
-# Data Ownership
+# Ownership Through the Flow
 
 Each stage owns only the information it creates.
 
-| Stage           | Owns                     |
-| --------------- | ------------------------ |
-| Vehicle         | Identity                 |
-| Configuration   | Market-specific identity |
-| Technical Data  | Facts                    |
-| Equipment       | Availability             |
-| Evidence        | Verified observations    |
-| Review          | Interpretation           |
-| Criterion Score | Criterion evaluation     |
-| Overall Score   | Aggregated evaluation    |
-| Recommendation  | Decision support         |
+| Stage           | Creates                 |
+| --------------- | ----------------------- |
+| Vehicle         | Shared identity         |
+| Configuration   | Purchasable identity    |
+| Technical       | Verified facts          |
+| Equipment       | Feature availability    |
+| Evidence        | Documented observations |
+| Review          | Interpretation          |
+| Criterion Score | Criterion evaluation    |
+| Overall Score   | Aggregated evaluation   |
+| Recommendation  | Decision support        |
 
-No stage should duplicate information owned by another stage.
+Each stage references previous stages without duplicating their information.
 
 ---
 
 # Traceability
 
-Every recommendation should be fully traceable.
+Every recommendation must be fully explainable.
 
-```text
+```text id="tknl1li"
 Recommendation
         │
         ▼
@@ -337,17 +378,17 @@ Evidence
 Source
 ```
 
-Every conclusion must be explainable using this chain.
+Every conclusion should be traceable back to documented evidence and its original source.
 
 ---
 
 # Unknown Values
 
-Unknown information should remain unknown until evidence becomes available.
+Unknown information remains Unknown until supported by Evidence.
 
-Unknown values must never be replaced by assumptions.
+Implementations shall never replace missing information with assumptions.
 
-Confidence should increase as additional evidence is collected.
+Confidence should increase only as additional Evidence becomes available.
 
 ---
 
@@ -355,7 +396,9 @@ Confidence should increase as additional evidence is collected.
 
 Every Criterion Score and Overall Score shall reference the Framework Version used during evaluation.
 
-This guarantees reproducibility across framework revisions.
+Framework Version guarantees reproducibility.
+
+Historical evaluations remain immutable.
 
 ---
 
@@ -366,36 +409,33 @@ The framework intentionally separates:
 * Identity
 * Facts
 * Availability
-* Evidence
+* Observations
 * Interpretation
 * Evaluation
 * Recommendation
 
-This separation ensures that improvements in one stage do not invalidate information in previous stages.
+This separation ensures that improvements in later stages never invalidate earlier stages.
 
 ---
 
 # Future Compatibility
 
-The data flow has been designed to support:
+The data flow supports implementations using:
 
-* Spreadsheet implementations
-* Relational databases
+* Excel
+* Google Sheets
+* SQLite
+* PostgreSQL
 * REST APIs
 * GraphQL
-* Automated data pipelines
 * AI-assisted evidence collection
 
 without changing the conceptual model.
+
+Future framework versions may introduce additional normalization where justified by implementation experience.
 
 ---
 
 # Guiding Principle
 
-The EV Decision Framework does not transform data directly into recommendations.
-
-It transforms:
-
-**Facts → Evidence → Understanding → Evaluation → Recommendation**
-
-Every stage must preserve transparency, traceability and reproducibility.
+> **The framework transforms facts into observations, observations into understanding, understanding into evaluation and evaluation into recommendations — while preserving complete traceability at every stage.**

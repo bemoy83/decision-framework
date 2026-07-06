@@ -2,73 +2,130 @@
 
 ## Implementation Contract
 
-**Version:** 1.0
+**Version:** 1.1
 **Status:** Locked
-**Last Updated:** 2026-07-04
+**Last Updated:** 2026-07-06
 
 ---
 
 # Purpose
 
-This document defines the minimum requirements that any implementation of the EV Decision Framework must satisfy.
+This document defines the minimum requirements that every implementation of the EV Decision Framework must satisfy.
 
-The purpose is to ensure that different implementations remain functionally equivalent while allowing freedom in technology and implementation details.
+Its purpose is to ensure that different implementations produce equivalent framework behaviour while remaining free to choose different technologies.
 
-Examples of valid implementations include:
+Valid implementations include:
 
-* Excel workbook
+* Excel
 * Google Sheets
 * SQLite
 * PostgreSQL
-* REST API
-* Web application
+* REST APIs
+* Web applications
 
 Implementations may differ internally.
 
-They must produce equivalent framework behaviour.
+They shall produce equivalent framework behaviour.
+
+---
+
+# Scope
+
+This contract specifies:
+
+* mandatory entities;
+* mandatory relationships;
+* mandatory traceability;
+* mandatory framework behaviour.
+
+It deliberately does **not** specify implementation technology.
 
 ---
 
 # Source of Truth
 
-The implementation shall follow the framework documentation.
+Framework documentation is the authoritative source of truth.
 
-The implementation shall **never** redefine framework behaviour.
+Implementations shall implement the framework.
 
-Documentation always takes precedence over implementation.
+Implementations shall never redefine framework behaviour.
 
----
-
-# Required Components
-
-Every implementation shall support:
-
-* Vehicles
-* Configurations
-* Technical Data
-* Equipment
-* Equipment Definitions
-* Evidence
-* Reviews
-* Sources
-* Criteria
-* Scores
-* Framework Versions
-
-These concepts are mandatory.
+If implementation and documentation disagree, documentation takes precedence until explicitly updated through the framework governance process.
 
 ---
 
-# Entity Integrity
+# Required Entities
 
-Every entity shall have:
+Every compliant implementation shall support the following entities.
 
-* a stable unique identifier;
-* a clearly defined owner;
-* explicit relationships;
-* a documented lifecycle.
+```text id="bhmjlwm"
+Vehicle
+Configuration
+Technical
+Criterion
+EquipmentDefinition
+Equipment
+Source
+Evidence
+Review
+Score
+FrameworkVersion
+Decision
+```
 
-No implementation shall duplicate entity ownership.
+These entities are mandatory.
+
+Implementations may extend the model but shall not redefine mandatory entities.
+
+---
+
+# Entity Ownership
+
+Every entity shall own only the information it creates.
+
+Ownership shall never be duplicated.
+
+Summary
+
+| Entity              | Owns                    |
+| ------------------- | ----------------------- |
+| Vehicle             | Shared identity         |
+| Configuration       | Purchasable identity    |
+| Technical           | Measurable facts        |
+| EquipmentDefinition | Feature definition      |
+| Equipment           | Feature availability    |
+| Source              | Information origin      |
+| Evidence            | Documented observations |
+| Review              | Interpretation          |
+| Criterion           | Evaluation definition   |
+| Score               | Calculated evaluation   |
+| FrameworkVersion    | Framework identity      |
+| Decision            | Architectural history   |
+
+Implementations shall preserve these ownership boundaries.
+
+---
+
+# Identifier Integrity
+
+Every entity shall provide a stable unique identifier.
+
+Minimum identifiers include:
+
+* VehicleID
+* ConfigurationID
+* TechnicalID
+* CriterionID
+* EquipmentDefinitionID
+* EquipmentID
+* SourceID
+* EvidenceID
+* ReviewID
+* ScoreID
+* FrameworkVersion
+* DecisionID
+
+Identifiers shall remain stable throughout the lifetime of the entity.
 
 ---
 
@@ -76,56 +133,54 @@ No implementation shall duplicate entity ownership.
 
 Every implementation shall guarantee valid references.
 
-Minimum requirements include:
+Mandatory relationships include:
 
-* Every Configuration references an existing Vehicle.
-* Every Technical record references an existing Vehicle or Configuration.
-* Every Equipment record references an existing Equipment Definition.
-* Every Evidence record references at least one Source.
-* Every Review references at least one Evidence record.
-* Every Criterion Score references:
+Configuration references one Vehicle.
 
-  * one Criterion,
-  * one Review,
-  * one Framework Version.
-* Every Overall Score references:
+Technical references either:
 
-  * one Configuration,
-  * one Framework Version.
+* one Vehicle; or
+* one Configuration.
 
-Broken references are considered implementation errors.
+Equipment references:
+
+* one Configuration;
+* one EquipmentDefinition.
+
+Evidence references:
+
+* one Vehicle or one Configuration;
+* at least one Source.
+
+Review references:
+
+* one Vehicle or one Configuration;
+* at least one Evidence record.
+
+Score references:
+
+* one Configuration;
+* one Criterion;
+* one Review;
+* one FrameworkVersion.
+
+Decision references one FrameworkVersion.
+
+Broken references are implementation errors.
 
 ---
 
-# Data Ownership
+# Configuration as Evaluation Target
 
-Each implementation shall preserve ownership boundaries.
+Configuration is the framework's primary evaluation target.
 
-Examples:
+Scores shall always belong to Configurations.
 
-Vehicle owns:
+Vehicle may contribute shared information.
 
-* identity
-* manufacturer
-* model
+Vehicle shall never receive an Overall Score.
 
-Technical Data owns:
-
-* measurable specifications
-
-Evidence owns:
-
-* documented observations
-
-Review owns:
-
-* interpretation
-
-Score owns:
-
-* evaluation
-
-Implementations shall not duplicate ownership across entities.
+Purchase recommendations shall always refer to Configurations.
 
 ---
 
@@ -133,11 +188,13 @@ Implementations shall not duplicate ownership across entities.
 
 Implementations shall use the enumeration values defined in:
 
-`framework/architecture/enumerations.md`
+```text id="1ejh9z"
+framework/architecture/enumerations.md
+```
 
-Enumeration values are considered part of the public framework contract.
+Enumeration identifiers are part of the public framework contract.
 
-Implementations may localize display text.
+Display values may be localized.
 
 Internal values shall remain unchanged.
 
@@ -145,35 +202,76 @@ Internal values shall remain unchanged.
 
 # Framework Versioning
 
-Every evaluation shall reference the Framework Version used.
+Every evaluation shall reference one FrameworkVersion.
 
-Implementations shall support historical evaluations without recalculation.
+FrameworkVersion guarantees:
 
-Historical results must remain reproducible.
+* reproducibility;
+* historical comparison;
+* methodology traceability.
+
+Historical evaluations shall never be recalculated automatically using newer framework versions.
+
+---
+
+# Information Flow
+
+Implementations shall preserve the following information flow.
+
+```text id="hg3rgm"
+Source
+        │
+        ▼
+Evidence
+        │
+        ▼
+Review
+        │
+        ▼
+Criterion Score
+        │
+        ▼
+Overall Score
+```
+
+Reverse information flow is prohibited.
+
+Scores shall never modify Reviews.
+
+Reviews shall never modify Evidence.
+
+Evidence shall never modify Sources.
 
 ---
 
 # Traceability
 
-Every recommendation shall be fully traceable.
+Every recommendation shall be fully explainable.
 
 Minimum traceability chain:
 
-```text
+```text id="z5yptl"
 Recommendation
-    ↓
+        │
+        ▼
 Overall Score
-    ↓
+        │
+        ▼
 Criterion Score
-    ↓
+        │
+        ▼
 Review
-    ↓
+        │
+        ▼
 Evidence
-    ↓
+        │
+        ▼
 Source
 ```
 
-If traceability is broken, the implementation is not framework compliant.
+Every score shall expose a complete explanation path.
+
+Loss of traceability results in framework non-compliance.
 
 ---
 
@@ -181,15 +279,17 @@ If traceability is broken, the implementation is not framework compliant.
 
 Unknown information shall remain Unknown.
 
-Implementations shall never replace missing information with inferred values unless explicitly documented.
+Implementations shall never replace missing information with inferred values unless explicitly documented by the framework.
+
+Unknown values shall not participate in scoring unless framework rules define explicit behaviour.
 
 ---
 
 # Confidence
 
-Every qualitative assessment shall support confidence values.
+Evidence and Reviews shall support confidence values.
 
-Confidence shall propagate through the evaluation process.
+Confidence shall remain visible throughout the evaluation pipeline.
 
 Implementations shall not silently discard confidence information.
 
@@ -197,30 +297,32 @@ Implementations shall not silently discard confidence information.
 
 # Scoring
 
-The implementation shall calculate:
+Implementations shall calculate:
 
-* Criterion Scores
-* Overall Scores
+* Criterion Scores;
+* Overall Scores.
 
-The implementation shall not permit manual editing of calculated scores.
+Calculated scores shall never be entered manually.
 
-Raw data may be edited.
+Scores shall always be derived from:
 
-Calculated results shall be derived from framework rules.
+* Reviews;
+* Criteria;
+* Framework weighting;
+* FrameworkVersion.
 
 ---
 
 # Explainability
 
-Every calculated score shall be explainable.
+Every calculated score shall explain:
 
-Implementations shall expose sufficient information to identify:
+* which Criterion was evaluated;
+* which Review contributed;
+* which Evidence supported the Review;
+* which Sources supported the Evidence.
 
-* contributing reviews;
-* supporting evidence;
-* originating sources.
-
-No score shall exist without an explanation path.
+No score shall exist without a complete explanation path.
 
 ---
 
@@ -228,11 +330,12 @@ No score shall exist without an explanation path.
 
 Given:
 
-* identical framework version,
-* identical data,
-* identical evidence,
+* identical FrameworkVersion;
+* identical data;
+* identical Evidence;
+* identical Reviews;
 
-every compliant implementation shall produce identical scores.
+every compliant implementation shall produce identical results.
 
 Framework behaviour shall be deterministic.
 
@@ -242,42 +345,42 @@ Framework behaviour shall be deterministic.
 
 Implementations should validate:
 
-* required identifiers;
+* unique identifiers;
+* mandatory relationships;
 * enumeration values;
-* mandatory references;
 * duplicate identifiers;
 * orphaned records;
-* missing framework versions.
+* missing FrameworkVersion references.
 
-Validation errors should be reported before scoring.
+Validation should occur before scoring.
 
 ---
 
 # Migration
 
-Implementations should permit export without loss of meaning.
+Implementations should permit migration without loss of meaning.
 
-The framework shall remain portable between:
+Supported migration targets include:
 
 * spreadsheets;
 * databases;
 * APIs.
 
-No implementation-specific behaviour should become part of the framework.
+Implementation-specific behaviour shall never become part of the framework definition.
 
 ---
 
 # Non-Goals
 
-The implementation contract does not specify:
+This contract does not define:
 
 * user interface;
+* storage technology;
 * programming language;
-* storage engine;
 * performance optimisation;
-* deployment model.
+* deployment strategy.
 
-These are implementation choices.
+These remain implementation choices.
 
 ---
 
@@ -285,7 +388,7 @@ These are implementation choices.
 
 ## Fully Compliant
 
-Implements every mandatory requirement.
+Implements every mandatory framework requirement.
 
 Produces deterministic, explainable and reproducible results.
 
@@ -293,7 +396,7 @@ Produces deterministic, explainable and reproducible results.
 
 ## Partially Compliant
 
-Implements the framework but lacks optional validation or migration features.
+Implements the framework correctly but omits optional validation or migration capabilities.
 
 ---
 
@@ -306,16 +409,11 @@ Examples include:
 * broken traceability;
 * duplicated ownership;
 * undocumented scoring;
-* missing framework version binding.
+* missing FrameworkVersion binding;
+* invalid entity relationships.
 
 ---
 
 # Guiding Principle
 
-Implementations are replaceable.
-
-The framework is not.
-
-Technology may evolve.
-
-The implementation contract ensures that every implementation remains faithful to the methodology rather than introducing its own behaviour.
+> **Implementations may differ internally, but they shall always preserve the framework's methodology, ownership, traceability and behaviour.**
