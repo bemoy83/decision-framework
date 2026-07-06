@@ -2,7 +2,7 @@
 
 ## Entity Model
 
-**Version:** 1.1
+**Version:** 1.2
 **Status:** Locked
 **Last Updated:** 2026-07-06
 
@@ -131,9 +131,12 @@ Owns
 
 * trim
 * market
+* status
 * pricing
 * package information
 * configuration-specific characteristics
+
+Configuration Status represents the commercial lifecycle of the purchasable Configuration and is independent of Vehicle Status.
 
 Configuration is the primary evaluation target of the framework.
 

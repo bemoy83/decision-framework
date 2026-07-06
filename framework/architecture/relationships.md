@@ -2,7 +2,7 @@
 
 ## Relationships Model
 
-**Version:** 1.1
+**Version:** 1.2
 **Status:** Locked
 **Last Updated:** 2026-07-06
 
@@ -114,6 +114,10 @@ Examples
 Vehicle represents the shared product.
 
 Configuration represents the purchasable product.
+
+Configuration owns its own lifecycle status.
+
+Vehicle Status shall never be interpreted as Configuration Status.
 
 ---
 
@@ -320,7 +324,7 @@ Every architecture decision references the Framework Version under which it beca
 | Entity              | Owns                                                                                           |
 | ------------------- | ---------------------------------------------------------------------------------------------- |
 | Vehicle             | Shared identity, shared Technical, shared Evidence, shared Reviews                             |
-| Configuration       | Purchasable characteristics, Equipment, configuration-specific Technical, Evidence and Reviews |
+| Configuration       | Purchasable characteristics, status, Equipment, configuration-specific Technical, Evidence and Reviews |
 | EquipmentDefinition | Feature definition                                                                             |
 | Equipment           | Availability                                                                                   |
 | Source              | Information origin                                                                             |

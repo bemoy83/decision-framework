@@ -2,7 +2,7 @@
 
 ## Workbook Schema
 
-**Version:** 1.1
+**Version:** 1.2
 **Status:** Locked
 **Last Updated:** 2026-07-06
 
@@ -560,6 +560,7 @@ ConfigurationID
 | ConfigurationID | Stable configuration identifier  |
 | VehicleID       | Parent vehicle                   |
 | Market          | Market or region                 |
+| Status          | Commercial lifecycle status      |
 | Trim            | Trim designation                 |
 | BasePrice       | Manufacturer base price          |
 | ConfiguredPrice | Price of evaluated configuration |
@@ -574,6 +575,10 @@ Each Configuration belongs to exactly one Vehicle.
 Configuration-specific pricing is stored only here.
 
 Configuration acts as the purchasing entity defined in ADR-003.
+
+Status values shall follow the **Configuration Status** framework enumeration.
+
+Configuration Status describes the commercial lifecycle of the purchasable Configuration and shall never be derived from Vehicle Status (see ADR-004).
 
 ---
 

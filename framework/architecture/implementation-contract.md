@@ -2,7 +2,7 @@
 
 ## Implementation Contract
 
-**Version:** 1.1
+**Version:** 1.2
 **Status:** Locked
 **Last Updated:** 2026-07-06
 
@@ -181,6 +181,12 @@ Vehicle may contribute shared information.
 Vehicle shall never receive an Overall Score.
 
 Purchase recommendations shall always refer to Configurations.
+
+Every Configuration shall own exactly one Configuration Status.
+
+Configuration Status shall be validated using the Configuration Status enumeration.
+
+Vehicle Status shall never be used as a substitute for Configuration Status.
 
 ---
 
