@@ -231,6 +231,24 @@ The task is **not** complete when implementation has merely been committed local
 
 ---
 
+# Review Checklist
+
+Reviewer shall verify:
+
+□ Validation exists.
+
+□ Dropdown values match enumerations.md.
+
+□ Legacy values removed.
+
+□ Named ranges correctly defined.
+
+□ Workbook still opens correctly.
+
+□ Workbook version unchanged.
+
+---
+
 # Guiding Principle
 
 > **Implement the documented framework faithfully. Improve implementation quality without changing framework behaviour.**
