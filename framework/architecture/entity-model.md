@@ -44,7 +44,9 @@ The framework currently defines the following entities.
 ```text
 Vehicle
 Configuration
+Technical
 Criterion
+EquipmentDefinition
 Equipment
 Evidence
 Source
@@ -114,6 +116,50 @@ Owns
 
 ---
 
+# Technical
+
+Represents a single measurable technical characteristic of a Vehicle or Configuration.
+
+Examples
+
+* Overall Length
+* Wheelbase
+* Battery Gross Capacity
+* Battery Net Capacity
+* Maximum DC Charging Power
+* WLTP Range
+* Kerb Weight
+
+Identity
+
+TechnicalID
+
+Owns
+
+* Property
+* Value
+* Unit
+* Source
+* Confidence
+* Last Updated
+
+Technical represents verified factual information.
+
+Technical data never contains interpretation, evaluation or recommendations.
+
+Each Technical record belongs to either:
+
+* one Vehicle; or
+* one Configuration,
+
+depending on the scope of the characteristic.
+
+Whenever a specification applies to every configuration, it should belong to the Vehicle.
+
+Configuration-specific specifications should only be stored at the Configuration level.
+
+---
+
 # Criterion
 
 Represents one evaluation criterion.
@@ -138,9 +184,40 @@ Owns
 
 ---
 
+# EquipmentDefinition
+
+Represents a reusable equipment concept.
+
+Examples
+
+* 360 Camera
+* Matrix LED Headlights
+* Heated Steering Wheel
+* OTA Updates
+* Adaptive Cruise Control
+
+Identity
+
+EquipmentDefinitionID
+
+Owns
+
+* Name
+* Category
+* Description
+* Weighted Status
+
+Equipment Definitions describe *what* a feature is.
+
+They do not describe whether a specific Configuration includes that feature.
+
+Availability is managed by the Equipment entity.
+
+---
+
 # Equipment
 
-Represents one equipment item.
+Represents the availability of an Equipment Definition for a specific Configuration.
 
 Examples
 
@@ -155,9 +232,12 @@ EquipmentID
 
 Owns
 
-* name
-* category
-* weighting status
+- Availability
+- Configuration
+- Confidence
+- Source
+
+Equipment references exactly one EquipmentDefinition.
 
 ---
 
