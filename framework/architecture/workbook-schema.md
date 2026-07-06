@@ -769,6 +769,12 @@ Each Equipment Definition exists exactly once.
 
 Equipment Definitions should remain stable across framework versions whenever possible.
 
+The **Category** column represents a domain classification rather than a framework enumeration.
+
+Category values follow the framework's naming conventions but are intentionally excluded from the enumeration contract.
+
+Introducing a new Equipment Category does not require changes to `framework/architecture/enumerations.md`.
+
 ---
 
 # 07_Reviews
@@ -840,6 +846,12 @@ Only one of VehicleID or ConfigurationID should be populated for a single Review
 Vehicle Reviews describe characteristics shared across all Configurations.
 
 Configuration Reviews describe purchasable differences.
+
+The **Category** column represents a framework-defined domain classification.
+
+Review Categories are intentionally excluded from the framework enumeration contract.
+
+New Review Categories may be introduced without modifying `framework/architecture/enumerations.md`.
 
 ---
 
@@ -1276,13 +1288,15 @@ Broken references invalidate framework compliance.
 
 ## Enumeration Validation
 
+Only worksheet columns explicitly backed by framework enumerations shall use enumeration validation.
+
 Enumeration values shall conform to:
 
-```text id="pb3tzm"
 framework/architecture/enumerations.md
-```
 
 Unknown enumeration values shall be treated as validation errors.
+
+Columns representing domain classifications rather than framework enumerations shall follow documented naming conventions but shall not be constrained by the enumeration contract.
 
 ---
 
