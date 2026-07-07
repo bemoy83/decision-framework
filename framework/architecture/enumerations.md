@@ -269,6 +269,20 @@ Market applies to Configurations.
 
 ---
 
+# Language
+
+Represents the language a Source's content is published in.
+
+| Value | Description                          |
+| ----- | ------------------------------------- |
+| NB    | Norwegian Bokmål                      |
+| EN    | English                               |
+| OTHER | Any other language                    |
+
+Language applies to Sources (ADR-012).
+
+---
+
 # Unit
 
 Supported measurement units.

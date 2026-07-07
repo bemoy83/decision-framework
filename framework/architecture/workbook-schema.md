@@ -988,6 +988,7 @@ None
 * 04_Technical
 * 05_Equipment
 * 08_Evidence
+* 14_HardRequirementResults
 
 ---
 
@@ -1002,6 +1003,7 @@ None
 | URL           | Original location        |
 | PublishedDate | Publication date         |
 | RetrievedDate | Retrieval date           |
+| Language      | Language the source's content is published in (ADR-012) |
 | Notes         | Optional notes           |
 
 ---
@@ -1010,9 +1012,11 @@ None
 
 Each Source should exist only once.
 
-Evidence, Technical and Equipment reference Sources.
+Evidence, Technical, Equipment and HardRequirementResult reference Sources.
 
 Reviews never reference Sources directly.
+
+`Type` maps onto the Evidence Policy's Tier A/B/C hierarchy — see `docs/02_criteria-and-weighting.md`'s Tier Mapping.
 
 ---
 

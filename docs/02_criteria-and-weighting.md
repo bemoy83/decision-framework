@@ -357,6 +357,18 @@ Long-term ownership experience.
 
 No individual source shall determine an evaluation on its own.
 
+## Tier Mapping
+
+`09_Sources.Type` (ADR-012) maps onto this hierarchy as follows:
+
+| Type | Tier |
+| --- | --- |
+| MANUFACTURER, CERTIFICATION, DATABASE | Tier A |
+| GOVERNMENT | Tier A |
+| PROFESSIONAL_REVIEW, VIDEO | Tier B |
+| COMMUNITY, OWNER_EXPERIENCE | Tier C |
+| OTHER | Assessed case by case; default Tier C unless documented otherwise in the Source's own Notes |
+
 Confidence should increase when multiple independent sources support the same conclusion.
 
 ---
