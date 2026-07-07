@@ -64,6 +64,7 @@ Configuration
 Technical
 TechnicalFieldDefinition
 Criterion
+HardRequirementResult
 EquipmentDefinition
 Equipment
 Source
@@ -100,6 +101,7 @@ Summary
 | Evidence            | Documented observations |
 | Review              | Interpretation          |
 | Criterion           | Evaluation definition   |
+| HardRequirementResult | Hard Requirement compliance conclusion |
 | Score               | Calculated evaluation   |
 | FrameworkVersion    | Framework identity      |
 | Decision            | Architectural history   |
@@ -125,6 +127,7 @@ Minimum identifiers include:
 * EvidenceID
 * ReviewID
 * ScoreID
+* HardRequirementResultID
 * FrameworkVersion
 * DecisionID
 
@@ -166,6 +169,11 @@ Score references:
 * one Criterion;
 * one Review;
 * one FrameworkVersion.
+
+HardRequirementResult references:
+
+* one Configuration;
+* one Criterion, where `Type = HARD`.
 
 Decision references one FrameworkVersion.
 

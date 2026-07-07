@@ -54,7 +54,8 @@ Vehicle
 │      ├── Equipment
 │      ├── Review
 │      ├── Score
-│      └── OverallScore
+│      ├── OverallScore
+│      └── HardRequirementResult
 │
 ├── Technical
 ├── Review
@@ -69,6 +70,11 @@ Technical
     │
     ▼
 TechnicalFieldDefinition
+
+HardRequirementResult
+    │
+    ▼
+Criterion (Type = HARD)
 
 Evidence
     │
@@ -360,6 +366,30 @@ Every OverallScore carries a coverage percentage describing what proportion of t
 
 ---
 
+## Configuration → HardRequirementResult
+
+Relationship
+
+**One-to-Many (1:N)**
+
+A Configuration has one HardRequirementResult per Hard Requirement Criterion.
+
+HardRequirementResult never contributes to weighted scoring.
+
+---
+
+## HardRequirementResult → Criterion
+
+Relationship
+
+**Many-to-One (N:1)**
+
+Every HardRequirementResult references exactly one Criterion, restricted to Criteria where `Type = HARD`.
+
+Criterion defines the requirement. HardRequirementResult defines whether a specific Configuration complies with it.
+
+---
+
 ## Decision → FrameworkVersion
 
 Relationship
@@ -383,6 +413,7 @@ Every architecture decision references the Framework Version under which it beca
 | Evidence            | Verified observations                                                                          |
 | Review              | Interpretation                                                                                 |
 | Score               | Evaluation                                                                                     |
+| HardRequirementResult | Hard Requirement compliance conclusion                                                       |
 | OverallScore        | Aggregated evaluation, coverage percentage                                                      |
 | FrameworkVersion    | Framework identity                                                                             |
 
@@ -423,6 +454,11 @@ OverallScore shall reference:
 * one FrameworkVersion.
 
 OverallScore shall not reference a single Review or a single Score.
+
+HardRequirementResult shall reference:
+
+* one Configuration;
+* one Criterion, where `Type = HARD`.
 
 Broken references are considered implementation errors.
 

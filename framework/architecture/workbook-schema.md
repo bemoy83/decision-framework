@@ -198,6 +198,7 @@ The workbook consists of the following worksheets.
 | 11_DecisionLog          | Metadata    | Framework and workbook change history            |
 | 12_OverallScores        | Calculated  | Aggregated Overall Score and coverage per Configuration |
 | 13_TechnicalFieldDefinitions | Reference | Technical field catalogue                    |
+| 14_HardRequirementResults | Operational | Hard Requirement compliance per Configuration |
 
 ---
 
@@ -247,6 +248,7 @@ Examples:
 * Equipment
 * Evidence
 * Reviews
+* Hard Requirement Results
 
 Operational worksheets represent the working dataset of the framework.
 
@@ -554,6 +556,7 @@ ConfigurationID
 * 07_Reviews
 * 08_Evidence
 * 10_Scoring
+* 14_HardRequirementResults
 
 ---
 
@@ -569,6 +572,7 @@ ConfigurationID
 | BasePrice       | Manufacturer base price          |
 | ConfiguredPrice | Price of evaluated configuration |
 | Notes           | Optional notes                   |
+| HardRequirementOverride | Whether this Configuration is deliberately kept in scoring/comparison despite a confirmed Hard Requirement FAIL |
 
 ---
 
@@ -583,6 +587,8 @@ Configuration acts as the purchasing entity defined in ADR-003.
 Status values shall follow the **Configuration Status** framework enumeration.
 
 Configuration Status describes the commercial lifecycle of the purchasable Configuration and shall never be derived from Vehicle Status (see ADR-004).
+
+`HardRequirementOverride` is independent of Configuration Status: it answers an evaluation-eligibility question, not a commercial-lifecycle question. It defaults to `FALSE`; a Configuration with a confirmed Hard Requirement FAIL (see `14_HardRequirementResults`) and `HardRequirementOverride = FALSE` should not proceed to weighted scoring. A Configuration with `HardRequirementOverride = TRUE` may be kept in the comparison at the user's explicit request despite a confirmed FAIL (ADR-009).
 
 ---
 
@@ -1270,6 +1276,73 @@ A single Technical Field Definition may be recorded multiple times per Vehicle o
 
 ---
 
+# 14_HardRequirementResults
+
+## Purpose
+
+Represents one Configuration's compliance result for one Hard Requirement Criterion.
+
+Hard Requirement Results answer:
+
+> Does this Configuration comply with this Hard Requirement?
+
+Hard Requirement Results never contain weighted scoring information.
+
+---
+
+## Worksheet Type
+
+Operational
+
+---
+
+## Primary Key
+
+HardRequirementResultID
+
+---
+
+## References
+
+* ConfigurationID
+* CriterionID (restricted to Criteria where Type = HARD)
+* SourceID (optional)
+
+---
+
+## Referenced By
+
+None
+
+---
+
+## Columns
+
+| Column                  | Description                                              |
+| ------------------------ | --------------------------------------------------------- |
+| HardRequirementResultID | Stable hard requirement result identifier                 |
+| ConfigurationID         | Evaluated configuration                                   |
+| CriterionID             | Hard Requirement criterion (Type = HARD)                  |
+| Result                  | PASS, FAIL, or UNKNOWN                                    |
+| Confidence              | Confidence level                                          |
+| Reason                  | Human-readable interpretation of the supporting fact      |
+| SourceID                | Supporting source (optional)                              |
+| FrameworkVersion        | Framework version this record was created or last verified under |
+
+---
+
+## Notes
+
+Every Configuration shall have exactly one Hard Requirement Result per active Criterion where `Type = HARD`.
+
+Result is a contributor-authored conclusion informed by, but never mechanically overridden by, the underlying `04_Technical`/`05_Equipment` facts (ADR-009) — the same relationship Review has to Evidence. It is never a calculated formula.
+
+Where a fact is inferred from a sibling Configuration of the same Vehicle rather than independently verified, `SourceID` may be left blank and the inference stated in `Reason` at a lower Confidence, following the same brand/sibling-fallback principle already used for Long-Term Ownership criteria.
+
+A Configuration with a confirmed FAIL result and `03_Configurations.HardRequirementOverride = FALSE` should not proceed to weighted scoring.
+
+---
+
 # Relationship Mapping
 
 This section describes how the logical relationships defined by the framework are represented within the Reference Workbook.
@@ -1399,6 +1472,24 @@ Scores never own source information.
 
 ---
 
+## HardRequirementResult
+
+```text id="hrr0001"
+Configuration
+        │
+        ▼
+Criterion (Type = HARD)
+        │
+        ▼
+HardRequirementResult
+```
+
+Hard Requirement Results represent contributor-authored compliance conclusions, not calculated framework evaluations.
+
+A Configuration with a confirmed FAIL result and `HardRequirementOverride = FALSE` should not proceed to weighted scoring.
+
+---
+
 # Validation Rules
 
 Every implementation of the Reference Workbook shall validate the following rules before scoring.
@@ -1449,6 +1540,11 @@ Every Score shall reference:
 * an existing Criterion;
 * an existing Review;
 * an existing FrameworkVersion.
+
+Every HardRequirementResult shall reference:
+
+* an existing Configuration;
+* an existing Criterion where `Type = HARD`.
 
 Broken references invalidate framework compliance.
 
@@ -1660,6 +1756,12 @@ ScoreID
 
 ```text id="gjrr1s"
 SCORE_000001
+```
+
+HardRequirementResultID
+
+```text id="hrr0002"
+HRR_000001
 ```
 
 OverallScoreID

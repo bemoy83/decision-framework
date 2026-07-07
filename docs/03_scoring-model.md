@@ -89,6 +89,8 @@ Examples include:
 
 Configurations failing one or more Hard Requirements shall not receive an Overall Score.
 
+Each Configuration's compliance with each Hard Requirement is recorded as a `HardRequirementResult` (`14_HardRequirementResults`): PASS, FAIL, or UNKNOWN, with a Reason and Confidence (ADR-009). A confirmed FAIL blocks weighted scoring unless the Configuration's `HardRequirementOverride` is explicitly set.
+
 ---
 
 # Stage 2 – Technical Facts

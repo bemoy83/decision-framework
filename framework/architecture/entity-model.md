@@ -60,6 +60,7 @@ Configuration
 Technical
 TechnicalFieldDefinition
 Criterion
+HardRequirementResult
 EquipmentDefinition
 Equipment
 Evidence
@@ -137,8 +138,11 @@ Owns
 * pricing
 * package information
 * configuration-specific characteristics
+* hard requirement override
 
 Configuration Status represents the commercial lifecycle of the purchasable Configuration and is independent of Vehicle Status.
+
+Hard requirement override represents a deliberate decision to keep a Configuration in scoring/comparison despite a confirmed Hard Requirement failure (ADR-009). It is independent of Configuration Status for the same reason Status is independent of Vehicle Status — commercial availability and evaluation eligibility are orthogonal facts.
 
 Configuration is the primary evaluation target of the framework.
 
@@ -249,6 +253,44 @@ Owns
 Criteria define **what** is evaluated.
 
 They never store evaluation results.
+
+---
+
+# HardRequirementResult
+
+## Purpose
+
+Represents one Configuration's compliance result for one Hard Requirement Criterion.
+
+Examples
+
+* Length within the 4500mm maximum
+* Winter motorway range meets the approximately 300km requirement
+* Adaptive cruise control present
+
+Identity
+
+HardRequirementResultID
+
+Owns
+
+* result
+* confidence
+* reason
+
+References
+
+* Configuration
+* Criterion (restricted to Type = HARD)
+* Source (optional)
+
+HardRequirementResult answers:
+
+> Does this Configuration comply with this Hard Requirement?
+
+Result is one of PASS, FAIL, or UNKNOWN.
+
+HardRequirementResult is a contributor-authored conclusion, not a calculated value (ADR-009) — it is informed by Technical and Equipment facts but never mechanically overridden by them, the same relationship Review has to Evidence.
 
 ---
 

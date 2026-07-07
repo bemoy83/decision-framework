@@ -135,6 +135,7 @@ Confidence applies to:
 * Equipment
 * Evidence
 * Reviews
+* Hard Requirement Results
 
 ---
 
@@ -182,6 +183,20 @@ Defines how a Criterion participates in framework evaluation.
 | EXCLUDED      | Explicitly excluded from scoring   |
 
 Requirement Type belongs to Criterion definitions.
+
+---
+
+# Hard Requirement Result
+
+Represents a Configuration's compliance result for one Hard Requirement Criterion.
+
+| Value   | Description                                    |
+| ------- | ----------------------------------------------- |
+| PASS    | Configuration complies with the requirement     |
+| FAIL    | Configuration does not comply with the requirement |
+| UNKNOWN | Compliance has not been independently verified  |
+
+Hard Requirement Result is used by HardRequirementResult records (ADR-009).
 
 ---
 
