@@ -70,6 +70,7 @@ This checklist repeats short quick-reference copies of rules defined authoritati
 - [ ] Add `10_Scoring` rows (formulas, per ADR-005) for every `WEIGHTED`+`Active` Criterion with a supporting Review.
 - [ ] Add one `12_OverallScores` row for the flagship Configuration.
 - [ ] Sanity-check before committing: `python3 scripts/onboarding_helpers.py score <ConfigurationID>` — reproduces the expected `OverallScore`/`CoveragePercent` without needing LibreOffice to recalculate the live formulas.
+- [ ] If `15_Dashboard` exists, add the new flagship Configuration's ID to its Decision Summary/Category Breakdown/Coverage Grid helper-ID columns, and extend the Category Breakdown chart's series range to include it.
 
 # Step 10 — DecisionLog
 

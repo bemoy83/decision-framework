@@ -45,6 +45,27 @@ PREFIX_TABLE = {
 
 FREE_TEXT_SHEETS = {"09_Sources", "02_Vehicles", "03_Configurations"}
 
+# The 6 Configurations that currently receive full Evidence/Review/Score/OverallScore
+# treatment (see workbook-schema.md's Flagship Configuration Scope, ADR-013).
+FLAGSHIP_CONFIGURATION_IDS = [
+    "TESLA_MODEL_3_LONG_RANGE_RWD",
+    "RENAULT_4_TECHNO",
+    "SKODA_ELROQ_SELECTION_60",
+    "VOLVO_EX30_P8_AWD",
+    "KIA_EV2_FWD_LONG_RANGE_GT_LINE",
+    "BYD_ATTO3_DESIGN",
+]
+
+# sheet -> (VehicleID column name or None, ConfigurationID column name).
+# Mirrors 15_Dashboard's Coverage Grid formulas - kept in sync manually.
+COVERAGE_SHEETS = {
+    "04_Technical": ("VehicleID", "ConfigurationID"),
+    "05_Equipment": (None, "ConfigurationID"),
+    "08_Evidence": ("VehicleID", "ConfigurationID"),
+    "07_Reviews": ("VehicleID", "ConfigurationID"),
+    "10_Scoring": (None, "ConfigurationID"),
+}
+
 
 def load(path):
     return openpyxl.load_workbook(path, data_only=False)
@@ -188,6 +209,93 @@ def cmd_score(args):
     )
 
 
+def _parent_vehicle_id(wb, configuration_id):
+    ws = wb["03_Configurations"]
+    header = [c.value for c in next(ws.iter_rows(min_row=1, max_row=1))]
+    idx = {name: i for i, name in enumerate(header)}
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        if row[idx["ConfigurationID"]] == configuration_id:
+            return row[idx["VehicleID"]]
+    return None
+
+
+def _coverage_counts(wb, configuration_id, vehicle_id):
+    """Independently recomputes 15_Dashboard's Coverage Grid formulas for one Configuration."""
+    counts = {}
+    for sheet_name, (vehicle_col, config_col) in COVERAGE_SHEETS.items():
+        ws = wb[sheet_name]
+        header = [c.value for c in next(ws.iter_rows(min_row=1, max_row=1))]
+        idx = {name: i for i, name in enumerate(header)}
+        count = 0
+        for row in ws.iter_rows(min_row=2, values_only=True):
+            if vehicle_col and row[idx[vehicle_col]] == vehicle_id:
+                count += 1
+            elif row[idx[config_col]] == configuration_id:
+                count += 1
+        counts[sheet_name] = count
+    return counts
+
+
+def cmd_coverage(args):
+    wb = load(args.workbook)
+    configuration_ids = args.configuration_id or FLAGSHIP_CONFIGURATION_IDS
+
+    print(
+        f"{'ConfigurationID':<32}{'Technical':>10}{'Equipment':>10}"
+        f"{'Evidence':>10}{'Reviews':>10}{'Score':>8}"
+    )
+    for config_id in configuration_ids:
+        vehicle_id = _parent_vehicle_id(wb, config_id)
+        if vehicle_id is None:
+            print(f"  WARNING: {config_id} not found in 03_Configurations - skipping")
+            continue
+        counts = _coverage_counts(wb, config_id, vehicle_id)
+        print(
+            f"{config_id:<32}"
+            f"{counts['04_Technical']:>10}{counts['05_Equipment']:>10}"
+            f"{counts['08_Evidence']:>10}{counts['07_Reviews']:>10}{counts['10_Scoring']:>8}"
+        )
+
+    print()
+    print("Ranked Decision Summary (OverallScore descending):")
+    print(f"{'Rank':<6}{'ConfigurationID':<32}{'OverallScore':>14}{'CoveragePercent':>17}")
+    ranked = []
+    for config_id in configuration_ids:
+        weights, total_weight = _criteria_weights(wb)
+        review_scores = _review_scores(wb)
+        ws = wb["10_Scoring"]
+        header = [c.value for c in next(ws.iter_rows(min_row=1, max_row=1))]
+        idx = {name: i for i, name in enumerate(header)}
+        overall_score = 0.0
+        scored_weight = 0.0
+        for row in ws.iter_rows(min_row=2, values_only=True):
+            if row[idx["ConfigurationID"]] != config_id:
+                continue
+            criterion_id = row[idx["CriterionID"]]
+            review_id = row[idx["ReviewID"]]
+            weight = weights.get(criterion_id)
+            score = review_scores.get(review_id)
+            if weight is None or score is None:
+                continue
+            raw_score = round(score / 5 * 100, 2)
+            overall_score += round(raw_score * weight / 100, 2)
+            scored_weight += weight
+        coverage_percent = round(scored_weight / total_weight * 100, 2) if total_weight else 0.0
+        ranked.append((config_id, round(overall_score, 2), coverage_percent))
+
+    for rank, (config_id, overall_score, coverage_percent) in enumerate(
+        sorted(ranked, key=lambda t: t[1], reverse=True), start=1
+    ):
+        print(f"{rank:<6}{config_id:<32}{overall_score:>14}{coverage_percent:>17}")
+
+    print()
+    print(
+        "Note: this recomputes what 15_Dashboard's formulas are expected to show. It does not "
+        "confirm the chart or conditional-formatting colors actually render correctly - open "
+        "the workbook in Excel to check those visually."
+    )
+
+
 def cmd_validate(args):
     wb_formulas = load(args.workbook)
     wb_values = openpyxl.load_workbook(args.workbook, data_only=True)
@@ -243,6 +351,17 @@ def main():
     p_validate.add_argument("configuration_id")
     p_validate.add_argument("--framework-version", help="Override auto-detected FrameworkVersion")
     p_validate.set_defaults(func=cmd_validate)
+
+    p_coverage = subparsers.add_parser(
+        "coverage",
+        help="Independently recompute what 15_Dashboard's Coverage Grid and Decision Summary should show",
+    )
+    p_coverage.add_argument(
+        "--configuration-id",
+        action="append",
+        help="Repeatable. Defaults to the 6 flagship Configurations if omitted.",
+    )
+    p_coverage.set_defaults(func=cmd_coverage)
 
     args = parser.parse_args()
     args.func(args)

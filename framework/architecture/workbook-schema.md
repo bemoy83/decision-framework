@@ -262,6 +262,7 @@ Examples:
 
 * Scoring
 * Overall Scores
+* Dashboard (`15_Dashboard`, see `11_DecisionLog` `DEC_DASHBOARD_001`) — a presentational aggregation of Scoring, Overall Scores, and operational data; it introduces no new information and every cell must remain formula-derived, so it is never an authoritative source in its own right
 
 Calculated worksheets shall never become the authoritative source for raw information.
 
