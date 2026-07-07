@@ -1682,6 +1682,23 @@ When entering information into the workbook:
 
 Notes are never evaluated and never contribute to scoring.
 
+## Notes Content Policy (ADR-011)
+
+Notes may contain:
+
+* a short explanation of something not otherwise self-evident from structured columns;
+* a pointer to where a deviation or decision is recorded (e.g. "see `14_HardRequirementResults`; see `DEC_M002_VIOLATION`") — never a restatement of that record's content;
+* an implementation comment (a scoring-treatment note, a data-entry caveat).
+
+Notes shall not contain:
+
+* Review — an interpretation of evidence belongs in `07_Reviews`;
+* Evidence — a documented observation with its own source/date belongs in `08_Evidence` or `09_Sources`;
+* History — a narrative of what happened and when belongs in `11_DecisionLog`;
+* Decision rationale — belongs in `11_DecisionLog`, referenced by pointer, not restated.
+
+If a fact could be looked up in another worksheet, Notes should say where, not say what.
+
 ---
 
 # Naming Conventions
