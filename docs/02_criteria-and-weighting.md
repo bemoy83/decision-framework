@@ -371,6 +371,16 @@ No individual source shall determine an evaluation on its own.
 
 Confidence should increase when multiple independent sources support the same conclusion.
 
+## Sourcing Verification (ADR-013)
+
+An AI-generated web-search summary may be used to *locate* a candidate source. It shall never be used to *confirm* what that source says.
+
+A claim shall not be cited as Evidence, or used to support a Review, until its existence and content have been independently verified by direct retrieval of the cited source's own page.
+
+Where direct retrieval cannot confirm the claim — the page does not contain the asserted figure, or the page is inaccessible — the fact shall be recorded as Unknown, per `docs/01_project-philosophy.md`'s "Unknown is better than assumed" principle, not asserted at a merely reduced confidence.
+
+For example: a web-search summary once asserted a specific winter-range test result for a vehicle under evaluation; direct retrieval of the cited source's own page showed no such result at all, only unrelated summer test data. The claim was correctly left Unknown.
+
 ---
 
 # Confidence

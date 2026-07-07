@@ -590,6 +590,8 @@ Configuration Status describes the commercial lifecycle of the purchasable Confi
 
 `HardRequirementOverride` is independent of Configuration Status: it answers an evaluation-eligibility question, not a commercial-lifecycle question. It defaults to `FALSE`; a Configuration with a confirmed Hard Requirement FAIL (see `14_HardRequirementResults`) and `HardRequirementOverride = FALSE` should not proceed to weighted scoring. A Configuration with `HardRequirementOverride = TRUE` may be kept in the comparison at the user's explicit request despite a confirmed FAIL (ADR-009).
 
+Not every Configuration of a Vehicle proceeds to weighted scoring — see Flagship Configuration Scope (ADR-013) below `12_OverallScores`.
+
 ---
 
 # 04_Technical
@@ -1225,6 +1227,20 @@ OverallScore should never be manually edited.
 
 ---
 
+# Flagship Configuration Scope (ADR-013)
+
+Not every Configuration belonging to a Vehicle receives Evidence, Review, Score, and OverallScore records.
+
+By established practice, exactly one Configuration per Vehicle — the "flagship," typically the trim under serious purchase consideration — receives the full Evidence → Review → Score → OverallScore treatment.
+
+Sibling Configurations of the same Vehicle receive only `04_Technical` and `05_Equipment` records, and may have `14_HardRequirementResults` inferred from the flagship or another sibling (ADR-009).
+
+This is an evaluation-scope decision, distinct from and complementary to ADR-009's sibling-inference mechanism: ADR-009 governs how a `HardRequirementResult` may borrow a fact from a sibling once it is already settled which Configuration is being evaluated; this section governs which Configuration that is.
+
+Promoting a sibling Configuration to flagship status at any later time is always permitted and does not require a new ADR — it is a data-completeness action, not a methodology change.
+
+---
+
 # 13_TechnicalFieldDefinitions
 
 ## Purpose
@@ -1703,6 +1719,18 @@ Notes shall not contain:
 
 If a fact could be looked up in another worksheet, Notes should say where, not say what.
 
+## Confidence Defaults (ADR-013)
+
+Absent a specific reason to record a different level, new `04_Technical`, `05_Equipment`, `08_Evidence`, and `07_Reviews` records shall default to `MEDIUM` confidence — a single credible source, not independently cross-verified.
+
+`HIGH` is reserved for facts confirmed by multiple independent sources, or facts that are definitionally trivial to verify.
+
+`LOW` is reserved for facts inferred from a sibling Configuration, a mismatched trim/condition proxy, or otherwise weak supporting evidence.
+
+`UNKNOWN` remains governed by Data Entry Rule 4 above and by `docs/01_project-philosophy.md`'s "Unknown is better than assumed" principle — this default does not change when Unknown is the correct value, only what to record once a fact is actually recorded.
+
+`14_HardRequirementResults` is exempt from this default. ADR-009 already establishes that this worksheet's Confidence spans the full range by design, from trivially `HIGH` facts to caveated, near-`UNKNOWN` `LOW` inferences — a `MEDIUM` default would contradict that model.
+
 ---
 
 # Naming Conventions
@@ -1712,6 +1740,29 @@ Identifiers are immutable.
 Once assigned, an identifier shall never be reused or modified.
 
 Identifiers should remain stable across framework versions.
+
+## Identifier Format (ADR-013)
+
+Every numeric-sequence identifier follows `<PREFIX>_<N-digit zero-padded sequence>`, with one independent counter per worksheet, assigned in strictly increasing order. A retired or skipped number is never reused. The prefix and digit-width are fixed per worksheet and never change.
+
+Not every identifier is numeric-sequential — several worksheets use free-text or descriptive-suffix identifiers instead, by design. The table below is authoritative for every worksheet.
+
+| Worksheet | Prefix | Digits | Example | Notes |
+| --- | --- | --- | --- | --- |
+| 04_Technical | `TECH_` | 6 | `TECH_000159` | |
+| 05_Equipment | `EQ_` | 6 | `EQ_000068` | |
+| 07_Reviews | `REV_` | 6 | `REV_000120` | |
+| 08_Evidence | `EV_` | 6 | `EV_000147` | |
+| 10_Scoring | `SCORE_` | 6 | `SCORE_000121` | Calculated worksheet; ID still assigned sequentially on row creation |
+| 12_OverallScores | `OVSC_` | 6 | `OVSC_000006` | Calculated worksheet |
+| 14_HardRequirementResults | `HRR_` | 6 | `HRR_000100` | |
+| 11_DecisionLog | `DEC_<CATEGORY>_` | 3 | `DEC_ADR_012`, `DEC_DATA_010` | `<CATEGORY>` is free text (e.g. `ADR`, `DATA`, `ISSUE`), not a closed enumeration — new categories may be introduced without an enumeration change |
+| 09_Sources | `SRC_<free-text name>` | n/a | `SRC_NAF_BILGUIDEN_ATTO3` | Not numeric; the name should be descriptive and stable once assigned |
+| 02_Vehicles | free text | n/a | `BYD_ATTO3` | Name-based, human-readable |
+| 03_Configurations | free text | n/a | `BYD_ATTO3_DESIGN` | Name-based; the observed convention is `<VehicleID>_<Trim>` |
+| 06_EquipmentDefinitions | `EQDEF_` | n/a | `EQDEF_OTA` | Descriptive suffix, not numeric |
+| 13_TechnicalFieldDefinitions | `TF_` | n/a | `TF_WLTP_RANGE` | Descriptive suffix, not numeric |
+| 01_Criteria | `CR_` / `W0nn` / `M0nn` / `I0nn` | n/a | `W018`, `M002` | Locked reference data, predates this convention; out of scope to reformat |
 
 Examples
 
@@ -1726,8 +1777,8 @@ SKODA_ELROQ
 ConfigurationID
 
 ```text id="2x8xv2"
-CONF_KIA_EV2_EXCLUSIVE_NO
-CONF_KIA_EV2_GTLINE_NO
+KIA_EV2_FWD_LONG_RANGE_GT_LINE
+BYD_ATTO3_DESIGN
 ```
 
 TechnicalID
