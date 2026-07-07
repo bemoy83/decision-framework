@@ -552,6 +552,8 @@ Framework Versions guarantee reproducibility.
 
 Historical versions are immutable.
 
+A Framework Version increment is either a **Schema change** (weighting/methodology version unchanged; historical evaluations remain fully comparable) or a **Methodology change** (weighting/schema version changed; only the affected Criteria's evaluations become non-comparable across the increment) — see ADR-010. A record's `FrameworkVersion` reflects the ruleset that produced *that record's own value*, not necessarily when its underlying facts were gathered: a Review authored under one Framework Version may remain linked to a Score whose calculation was later formalized under a later version, without either record being rewritten.
+
 ---
 
 # Decision

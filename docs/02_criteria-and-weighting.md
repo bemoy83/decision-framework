@@ -382,9 +382,16 @@ Criteria and weighting shall be locked before evaluating Configurations.
 
 Changes require a new Framework Version.
 
+A Framework Version increment is one of two kinds (ADR-010):
+
+* **Schema change** — a new/changed/removed worksheet or column, a new enumeration, or a documentation correction that does not alter any Criterion's Weight, Type, or Hard Requirement flag, or the scoring calculation rule. No existing evaluation becomes invalid; historical Scores remain fully comparable to Scores produced after the increment.
+* **Methodology change** — a change to a Criterion's Weight, Type, or Hard Requirement flag, or to the scoring calculation rule itself. Only Scores for the affected Criteria become non-comparable to Scores for those same Criteria produced after the increment.
+
 Historical Configuration evaluations shall remain associated with the Framework Version under which they were produced.
 
-Scores generated using different Framework Versions shall never be compared directly.
+Scores generated using different Framework Versions shall never be compared directly for the same Criterion, unless the intervening increments were Schema changes only.
+
+A row's Framework Version records the ruleset that produced that row's own value, not necessarily when its underlying facts were gathered — a Review and its dependent Score may legitimately carry different Framework Versions.
 
 ---
 

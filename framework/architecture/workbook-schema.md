@@ -1133,10 +1133,11 @@ None
 | DecisionID       | Stable decision identifier           |
 | Date             | Decision date                        |
 | FrameworkVersion | Applicable framework version         |
-| Category         | Decision category                    |
-| Decision         | Decision summary                     |
-| Rationale        | Reason for the decision              |
-| Reference        | ADR, Issue or Pull Request reference |
+| Change           | Decision summary                     |
+| Reason           | Reason for the decision              |
+| DecisionOwner    | Who made or implemented the decision |
+| Notes            | Optional supporting detail           |
+| VersionBumpType  | SCHEMA, METHODOLOGY, or NONE — whether this entry changed the active Framework Version, and how (ADR-010) |
 
 ---
 
@@ -1147,6 +1148,10 @@ DecisionLog documents implementation history.
 Architectural decisions should reference the corresponding ADR whenever applicable.
 
 DecisionLog improves traceability between documentation, implementation and project history.
+
+This Columns table previously documented `Category`/`Decision`/`Rationale`/`Reference`, which never matched the live workbook's `Change`/`Reason`/`DecisionOwner`/`Notes` columns; corrected here to match the workbook, per the same documentation-vs-implementation precedent established in ADR-006 and ADR-007.
+
+`VersionBumpType = NONE` for any entry that did not change the active Framework Version (e.g. a routine scoring round, a data correction, or a wording-only revision). To determine whether an existing evaluation needs re-scoring after a Framework Version increment, scan for a `METHODOLOGY` entry between the evaluation's own Framework Version (exclusive) and the current Framework Version (inclusive).
 
 ---
 

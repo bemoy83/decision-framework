@@ -200,6 +200,20 @@ Hard Requirement Result is used by HardRequirementResult records (ADR-009).
 
 ---
 
+# Version Bump Type
+
+Classifies why a Framework Version increment occurred.
+
+| Value       | Description                                                    |
+| ----------- | ---------------------------------------------------------------- |
+| SCHEMA      | New/changed worksheet, column, or enumeration; no Criterion Weight/Type/Hard Requirement or calculation rule change |
+| METHODOLOGY | Criterion Weight/Type/Hard Requirement flag or the calculation rule changed |
+| NONE        | Entry did not change the active Framework Version               |
+
+Version Bump Type is used by `11_DecisionLog` records (ADR-010).
+
+---
+
 # Source Type
 
 Represents the origin of information.

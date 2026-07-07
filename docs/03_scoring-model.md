@@ -277,9 +277,9 @@ No score shall exist without a complete explanation path.
 
 Criteria and weighting belong to the Framework rather than individual Configurations.
 
-Changing weighting creates a new Framework Version.
+Changing weighting creates a new Framework Version — specifically a Methodology-type increment (ADR-010), distinct from a Schema-type increment (a new worksheet, column, or enumeration that does not touch any Criterion's Weight, Type, Hard Requirement flag, or the calculation rule).
 
-Configuration evaluations generated using different Framework Versions shall never be compared directly.
+Configuration evaluations generated using different Framework Versions shall never be compared directly for a Criterion whose Weight or calculation rule changed between those versions. Evaluations separated only by Schema-type increments remain directly comparable.
 
 Historical evaluations remain immutable.
 
@@ -306,7 +306,8 @@ To preserve consistency:
 * Technical Facts shall never be rewritten without justification.
 * Evidence shall never be removed without traceability.
 * Reviews shall remain linked to supporting Evidence.
-* Every significant methodology change creates a new Framework Version.
+* Every Framework Version increment is either a Schema change or a Methodology change (ADR-010); only a Methodology change requires re-scoring, and only for the Criteria it affects.
+* To determine whether an existing evaluation needs re-scoring after an increment, check `11_DecisionLog` for a Methodology-type entry between the evaluation's own Framework Version (exclusive) and the current Framework Version (inclusive).
 * Every Overall Score remains permanently associated with the Framework Version under which it was generated.
 
 ---
