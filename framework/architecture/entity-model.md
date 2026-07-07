@@ -401,6 +401,7 @@ ReviewID
 Owns
 
 * category
+* score
 * summary
 * confidence
 
@@ -408,6 +409,8 @@ References
 
 * Vehicle or Configuration
 * Evidence
+
+Review's `score` is a 1–5 qualitative-to-numeric conclusion (ADR-005) — the coarse-grained answer to "how well does the evidence support this Criterion." It is not a weighted or normalized value; those are calculated downstream by Score, never stored on Review.
 
 Review answers:
 

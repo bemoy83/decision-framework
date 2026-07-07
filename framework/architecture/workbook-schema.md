@@ -871,6 +871,8 @@ New Review Categories may be introduced without modifying `framework/architectur
 
 Where a Review references more than one Evidence record, `EvidenceID` shall contain a comma-separated list of Evidence identifiers. Every identifier in that list shall resolve to an existing `EvidenceID` (see ADR-006).
 
+`Summary` shall not restate a Criterion's Weight or a Configuration's Hard-Requirement/pipeline-eligibility status. Both already have a queryable home (`01_Criteria.Weight`; `11_DecisionLog` and the affected Configuration's or Overall Score's Notes) and shall be referenced by pointer, not repeated in prose (see ADR-008).
+
 ---
 
 # 08_Evidence
