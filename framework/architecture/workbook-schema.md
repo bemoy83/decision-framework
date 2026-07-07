@@ -197,6 +197,7 @@ The workbook consists of the following worksheets.
 | 10_Scoring              | Calculated  | Criterion scores                                 |
 | 11_DecisionLog          | Metadata    | Framework and workbook change history            |
 | 12_OverallScores        | Calculated  | Aggregated Overall Score and coverage per Configuration |
+| 13_TechnicalFieldDefinitions | Reference | Technical field catalogue                    |
 
 ---
 
@@ -225,6 +226,7 @@ Examples:
 
 * Criteria
 * Equipment Definitions
+* Technical Field Definitions
 * Sources
 
 Reference worksheets define concepts shared by many operational records.
@@ -611,6 +613,7 @@ TechnicalID
 ## References
 
 * VehicleID or ConfigurationID
+* TechnicalFieldID
 * SourceID
 
 ---
@@ -623,17 +626,19 @@ TechnicalID
 
 ## Columns
 
-| Column          | Description                     |
-| --------------- | ------------------------------- |
-| TechnicalID     | Stable technical identifier     |
-| VehicleID       | Parent vehicle (optional)       |
-| ConfigurationID | Parent configuration (optional) |
-| Property        | Technical property name         |
-| Value           | Measured value                  |
-| Unit            | Measurement unit                |
-| SourceID        | Supporting source               |
-| Confidence      | Confidence level                |
-| LastUpdated     | Date of last verification       |
+| Column           | Description                                                        |
+| ---------------- | ------------------------------------------------------------------- |
+| TechnicalID      | Stable technical identifier                                        |
+| VehicleID        | Parent vehicle (optional)                                          |
+| ConfigurationID  | Parent configuration (optional)                                    |
+| TechnicalField   | Reference to a Technical Field Definition                          |
+| Value            | Measured value                                                     |
+| Unit             | Measurement unit                                                   |
+| SourceID         | Supporting source                                                  |
+| Confidence       | Confidence level                                                   |
+| LastUpdated      | Date of last verification                                          |
+| FrameworkVersion | Framework version this record was created or last verified under   |
+| Qualifier        | Optional measurement-condition variant (wheel size, mirror state, measurement standard) |
 
 ---
 
@@ -649,6 +654,10 @@ Vehicle-level Technical records describe characteristics shared across all Confi
 Configuration-level Technical records describe trim-specific differences.
 
 Only one of VehicleID or ConfigurationID should be populated for a single Technical record.
+
+`TechnicalField` references exactly one `13_TechnicalFieldDefinitions.TechnicalFieldID`. It never holds a free-text property name directly — the definition owns the name, unit, and description; see ADR-007.
+
+`Qualifier` holds a measurement condition that distinguishes two records sharing the same `TechnicalFieldID` for the same Vehicle or Configuration (for example, two `WLTP range` records for the same Configuration under different wheel sizes, or `Width` recorded with mirrors folded vs. unfolded). It is left blank when no such condition applies or when the condition is unconfirmed.
 
 Technical data should remain factual and independently verifiable.
 
@@ -1199,6 +1208,66 @@ OverallScore should never be manually edited.
 
 ---
 
+# 13_TechnicalFieldDefinitions
+
+## Purpose
+
+Defines reusable technical field concepts.
+
+Technical Field Definitions answer:
+
+> What is this measurement, and in what unit?
+
+They never record a measured value.
+
+---
+
+## Worksheet Type
+
+Reference
+
+---
+
+## Primary Key
+
+TechnicalFieldID
+
+---
+
+## References
+
+None
+
+---
+
+## Referenced By
+
+* 04_Technical
+
+---
+
+## Columns
+
+| Column          | Description                                            |
+| --------------- | ------------------------------------------------------- |
+| TechnicalFieldID | Stable technical field identifier                       |
+| Name            | Field name                                              |
+| Unit            | Canonical measurement unit for this field                |
+| Description     | Field description, including known measurement caveats  |
+| Notes           | Optional framework notes                                |
+
+---
+
+## Notes
+
+Each Technical Field Definition exists exactly once.
+
+Technical Field Definitions should remain stable across framework versions whenever possible.
+
+A single Technical Field Definition may be recorded multiple times per Vehicle or Configuration in `04_Technical`, distinguished by `Qualifier` (see ADR-007) — for example one `WLTP range` record per wheel size, or one `Width` record per mirror state.
+
+---
+
 # Relationship Mapping
 
 This section describes how the logical relationships defined by the framework are represented within the Reference Workbook.
@@ -1234,6 +1303,9 @@ Vehicle
         ├──────────────┐
         ▼              ▼
 Technical        Configuration
+        │
+        ▼
+TechnicalFieldDefinition
 ```
 
 Technical records belong to either:
@@ -1242,6 +1314,8 @@ Technical records belong to either:
 * one Configuration.
 
 Both identifiers shall never be populated simultaneously.
+
+Every Technical record also references exactly one TechnicalFieldDefinition, which defines the field's name and canonical unit (ADR-007).
 
 ---
 
@@ -1350,6 +1424,11 @@ Every Equipment shall reference:
 * an existing Configuration;
 * an existing EquipmentDefinition.
 
+Every Technical shall reference:
+
+* an existing Vehicle or Configuration;
+* an existing TechnicalFieldDefinition.
+
 Every Evidence shall reference:
 
 * an existing Vehicle or Configuration;
@@ -1403,6 +1482,12 @@ Equipment definitions shall exist only in:
 
 ```text id="ekn9cm"
 06_EquipmentDefinitions
+```
+
+Technical field definitions shall exist only in:
+
+```text id="tfd0001"
+13_TechnicalFieldDefinitions
 ```
 
 Reviews shall never duplicate Evidence.
@@ -1525,6 +1610,14 @@ TechnicalID
 
 ```text id="ylmjxb"
 TECH_000001
+```
+
+TechnicalFieldID
+
+```text id="tfd0002"
+TF_KERB_WEIGHT
+TF_WLTP_RANGE
+TF_BOOT_VOLUME
 ```
 
 EquipmentDefinitionID

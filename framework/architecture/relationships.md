@@ -65,6 +65,11 @@ Equipment
     ▼
 EquipmentDefinition
 
+Technical
+    │
+    ▼
+TechnicalFieldDefinition
+
 Evidence
     │
     ▼
@@ -186,6 +191,20 @@ Every Equipment record references exactly one EquipmentDefinition.
 EquipmentDefinition defines the feature.
 
 Equipment defines whether that feature is available.
+
+---
+
+## Technical → TechnicalFieldDefinition
+
+Relationship
+
+**Many-to-One (N:1)**
+
+Every Technical record references exactly one TechnicalFieldDefinition.
+
+TechnicalFieldDefinition defines the field's name and canonical unit.
+
+Technical defines the measured value, and an optional Qualifier when a measurement-condition variant (e.g. wheel size, mirror state) distinguishes it from another record of the same field for the same Vehicle or Configuration (ADR-007).
 
 ---
 
@@ -357,6 +376,7 @@ Every architecture decision references the Framework Version under which it beca
 | ------------------- | ---------------------------------------------------------------------------------------------- |
 | Vehicle             | Shared identity, shared Technical, shared Evidence, shared Reviews                             |
 | Configuration       | Purchasable characteristics, status, Equipment, configuration-specific Technical, Evidence and Reviews |
+| TechnicalFieldDefinition | Technical field name and canonical unit                                                  |
 | EquipmentDefinition | Feature definition                                                                             |
 | Equipment           | Availability                                                                                   |
 | Source              | Information origin                                                                             |
@@ -374,7 +394,7 @@ Every implementation shall enforce the following relationships.
 
 A Configuration shall reference one Vehicle.
 
-Technical shall reference either one Vehicle or one Configuration.
+Technical shall reference either one Vehicle or one Configuration, and one TechnicalFieldDefinition.
 
 Equipment shall reference:
 

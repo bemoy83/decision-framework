@@ -58,6 +58,7 @@ References determine how information is connected.
 Vehicle
 Configuration
 Technical
+TechnicalFieldDefinition
 Criterion
 EquipmentDefinition
 Equipment
@@ -166,12 +167,16 @@ TechnicalID
 
 Owns
 
-* property
+* qualifier
 * value
 * unit
 * confidence
 * source reference
 * last updated
+
+References
+
+* TechnicalFieldDefinition
 
 Technical represents verified factual information.
 
@@ -183,6 +188,37 @@ Each Technical record belongs to either:
 * one Configuration,
 
 depending on where the characteristic remains true.
+
+Technical does not own the field's name, unit definition, or description — those belong to TechnicalFieldDefinition (ADR-007). Technical owns only the measured fact, and an optional Qualifier distinguishing measurement-condition variants (e.g. wheel size, mirror state) of the same field for the same Vehicle or Configuration.
+
+---
+
+# TechnicalFieldDefinition
+
+## Purpose
+
+Represents a reusable technical field concept.
+
+Examples
+
+* Kerb Weight
+* WLTP Range
+* Boot Volume
+* Battery Net
+
+Identity
+
+TechnicalFieldID
+
+Owns
+
+* name
+* unit
+* description
+
+TechnicalFieldDefinition describes **what is being measured, and in what unit**.
+
+It never describes a measured value.
 
 ---
 

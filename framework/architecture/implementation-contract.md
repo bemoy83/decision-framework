@@ -62,6 +62,7 @@ Every compliant implementation shall support the following entities.
 Vehicle
 Configuration
 Technical
+TechnicalFieldDefinition
 Criterion
 EquipmentDefinition
 Equipment
@@ -92,6 +93,7 @@ Summary
 | Vehicle             | Shared identity         |
 | Configuration       | Purchasable identity    |
 | Technical           | Measurable facts        |
+| TechnicalFieldDefinition | Technical field definition |
 | EquipmentDefinition | Feature definition      |
 | Equipment           | Feature availability    |
 | Source              | Information origin      |
@@ -115,6 +117,7 @@ Minimum identifiers include:
 * VehicleID
 * ConfigurationID
 * TechnicalID
+* TechnicalFieldID
 * CriterionID
 * EquipmentDefinitionID
 * EquipmentID
@@ -137,10 +140,10 @@ Mandatory relationships include:
 
 Configuration references one Vehicle.
 
-Technical references either:
+Technical references:
 
-* one Vehicle; or
-* one Configuration.
+* one Vehicle or one Configuration;
+* one TechnicalFieldDefinition.
 
 Equipment references:
 
