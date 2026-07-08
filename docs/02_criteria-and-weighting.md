@@ -124,6 +124,8 @@ The following requirements are mandatory.
 
 Configurations failing a mandatory requirement shall not proceed to weighted evaluation.
 
+Where no independent winter highway range test exists for a Configuration, Winter Range may be evaluated against an estimate (`WLTP_RANGE x 0.70`) at `Confidence = LOW` instead of remaining `UNKNOWN` indefinitely (ADR-014).
+
 ---
 
 # Weighted Categories
