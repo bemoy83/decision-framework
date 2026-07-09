@@ -45,7 +45,7 @@ PREFIX_TABLE = {
 
 FREE_TEXT_SHEETS = {"09_Sources", "02_Vehicles", "03_Configurations"}
 
-# The 6 Configurations that currently receive full Evidence/Review/Score/OverallScore
+# The 7 Configurations that currently receive full Evidence/Review/Score/OverallScore
 # treatment (see workbook-schema.md's Flagship Configuration Scope, ADR-013).
 FLAGSHIP_CONFIGURATION_IDS = [
     "TESLA_MODEL_3_LONG_RANGE_RWD",
@@ -54,6 +54,7 @@ FLAGSHIP_CONFIGURATION_IDS = [
     "VOLVO_EX30_P5_LONG_RANGE",
     "KIA_EV2_FWD_LONG_RANGE_GT_LINE",
     "BYD_ATTO3_DESIGN",
+    "SKODA_EPIQ_SELECTION_55_LAUNCH_EDITION",
 ]
 
 # sheet -> (VehicleID column name or None, ConfigurationID column name).
